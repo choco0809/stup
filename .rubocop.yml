@@ -1,0 +1,19 @@
+Documentation:
+  Enabled: false
+
+Metrics/BlockLength:
+  Exclude:
+    - test/**/*
+
+AllCops:
+  NewCops: enable
+  Exclude:
+    - app/views/**/*
+    - config/**/*
+    - config.ru
+    - node_modules/**/*
+    - db/migrate/*
+    - db/schema.rb
+    - storage/**/*
+    - tmp/**/*
+    - bin/**/*
