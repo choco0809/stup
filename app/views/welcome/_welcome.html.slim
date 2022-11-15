@@ -1,0 +1,18 @@
+div.hero.min-h-screen
+  div.hero-content.text-center
+    div.max-w-xl
+      h1.py-10.text-5xl.font-bold
+        | すたっぷ
+      p.py-3.text-2xl
+        | 学習を記録するとき、時計を意識していませんか？
+      p.py-3.text-2xl
+        | 学習時間をExcelなどに記録していませんか？
+      p.pt-16.pb-3.text-2xl
+        | すたっぷは
+        a.text-3xl.font-bold
+          | Discord Bot
+        | と連携することにより
+      p
+        | コマンド１つで学習時間を記録・管理することができます
+      div.pt-16.text-3xl
+        == button_to "学習を記録する", "/", method: :post, class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-6 px-16 rounded-full"
