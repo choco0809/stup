@@ -16,7 +16,7 @@ class User < ApplicationRecord
         name: auth_hash.info.name,
         email: auth_hash.info.email,
         image: auth_hash.info.image,
-        uid: auth_hash.uid,
+        uid: auth_hash.uid
       }
     end
   end
