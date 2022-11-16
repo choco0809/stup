@@ -1,7 +1,6 @@
 - if current_user
-  div
-    = image_tag current_user.image
-  div.text-black
-    = link_to "ログアウト", log_out_path
+  = render 'shared/header'
+  .h-96
+    | ここにカレンダーとかもろもろ
 - else
   = render 'welcome/welcome'
