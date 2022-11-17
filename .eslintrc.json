@@ -5,8 +5,9 @@
     },
     "extends": [
         "eslint:recommended",
-        "plugin:vue/vue3-essential",
-        "standard"
+        "standard",
+        "plugin:vue/vue3-recommended",
+        "prettier"
     ],
     "overrides": [
     ],
