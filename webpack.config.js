@@ -1,5 +1,6 @@
 const path    = require("path")
 const webpack = require("webpack")
+const { VueLoaderPlugin } = require('vue-loader')
 
 module.exports = {
   mode: "production",
@@ -12,9 +13,18 @@ module.exports = {
     sourceMapFilename: "[file].map",
     path: path.resolve(__dirname, "app/assets/builds"),
   },
+  module: {
+    rules: [
+      {
+        test: /\.vue$/,
+        loader: "vue-loader"
+      }
+    ]
+  },
   plugins: [
     new webpack.optimize.LimitChunkCountPlugin({
       maxChunks: 1
-    })
+    }),
+    new VueLoaderPlugin()
   ]
 }
