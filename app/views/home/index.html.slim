@@ -1,6 +1,7 @@
 - if current_user
   = render 'shared/header'
-  .h-96
-    #study_calendar
+  div.md:flex.justify-center.my-6
+    div.md:w-96.mx-2
+      #study_calendar
 - else
   = render 'welcome/welcome'
