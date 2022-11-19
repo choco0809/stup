@@ -1,14 +1,15 @@
 <template>
   <div class="flex justify-center">
     <div class="w-4" @click="previousMonth">
-      <button class="hover:border-b-2 border-black"> ＜ </button>
+      <button class="hover:border-b-2 border-black">＜</button>
     </div>
-    <div class="text-center mb-3 w-48">{{ calendarYear }} 年 {{ calendarMonth }} 月</div>
+    <div class="text-center mb-3 w-48">
+      {{ calendarYear }} 年 {{ calendarMonth }} 月
+    </div>
     <div v-if="!newsMonth()" class="w-4" @click="nextMonth">
-      <button class="hover:border-b-2 border-black"> ＞ </button>
+      <button class="hover:border-b-2 border-black">＞</button>
     </div>
-    <div v-else class="w-4">
-    </div>
+    <div v-else class="w-4"></div>
   </div>
   <table class="w-full">
     <thead>
@@ -94,7 +95,7 @@ export default {
       return new Date().getMonth() + 1
     },
     previousMonth() {
-      if (this.calendarMonth === 1){
+      if (this.calendarMonth === 1) {
         this.calendarMonth = 12
         this.calendarYear = this.calendarYear - 1
       } else {
@@ -103,7 +104,7 @@ export default {
       this.saveState()
     },
     nextMonth() {
-      if (this.calendarMonth === 12){
+      if (this.calendarMonth === 12) {
         this.calendarMonth = 1
         this.calendarYear = this.calendarYear + 1
       } else {
@@ -113,7 +114,8 @@ export default {
     },
     newsMonth() {
       return (
-          this.calendarYear === this.currentYear & this.calendarMonth === this.currentMonth
+        (this.calendarYear === this.currentYear) &
+        (this.calendarMonth === this.currentMonth)
       )
     },
     saveState() {
