@@ -87,7 +87,26 @@ export default {
       return lastDay.getDate()
     }
   },
+  mounted() {
+    this.loadState()
+  },
   methods: {
+    loadState() {
+      const params = new URLSearchParams(location.search)
+      const yearMonth = params.get('calendar') || ''
+      const match = /(\d{4})-(\d{2})/.exec(yearMonth)
+      if (!match) {
+        return
+      }
+      const year = parseInt(match[1])
+      const month = parseInt(match[2])
+      if (new Date(year, month).getTime() > Date.now()) {
+        return
+      }
+
+      this.calendarYear = year
+      this.calendarMonth = month
+    },
     getCurrentYear() {
       return new Date().getFullYear()
     },
