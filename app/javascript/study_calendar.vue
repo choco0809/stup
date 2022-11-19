@@ -4,7 +4,7 @@
       <button class="hover:border-b-2 border-black">＜</button>
     </div>
     <div class="text-center mb-3 w-48">
-      {{ calendarYear }} 年 {{ calendarMonth }} 月
+      {{ this.calendarYear }} 年 {{ calendarMonth }} 月
     </div>
     <div v-if="!newsMonth()" class="w-4" @click="nextMonth">
       <button class="hover:border-b-2 border-black">＞</button>
@@ -37,17 +37,17 @@
 </template>
 
 <script>
+import { mapGetters,mapMutations, mapActions } from 'vuex'
+
 export default {
   name: 'StudyCalendar',
-  data() {
-    return {
-      currentYear: this.getCurrentYear(),
-      currentMonth: this.getCurrentMonth(),
-      calendarYear: this.getCurrentYear(),
-      calendarMonth: this.getCurrentMonth()
-    }
-  },
   computed: {
+    ...mapGetters(
+        [
+            'calendarYear',
+            'calendarMonth'
+        ]
+    ),
     calendarWeeks() {
       const weekArry = []
       let value = []
@@ -88,9 +88,23 @@ export default {
     }
   },
   mounted() {
+    this.setCurrentYearAndCalendarYear()
+    this.setCurrentMonthAndCalendarMonth()
     this.loadState()
   },
   methods: {
+    ...mapMutations(
+        [
+            'updateCalendarYear',
+            'updateCalendarMonth'
+        ]
+    ),
+    ...mapActions(
+        [
+            'setCurrentYearAndCalendarYear',
+            'setCurrentMonthAndCalendarMonth'
+        ]
+    ),
     loadState() {
       const params = new URLSearchParams(location.search)
       const yearMonth = params.get('calendar') || ''
@@ -104,37 +118,34 @@ export default {
         return
       }
 
-      this.calendarYear = year
-      this.calendarMonth = month
-    },
-    getCurrentYear() {
-      return new Date().getFullYear()
+      this.updateCalendarYear({ year })
+      this.updateCalendarMonth({ month })
     },
     getCurrentMonth() {
       return new Date().getMonth() + 1
     },
     previousMonth() {
       if (this.calendarMonth === 1) {
-        this.calendarMonth = 12
-        this.calendarYear = this.calendarYear - 1
+        this.updateCalendarMonth( { month: 12 })
+        this.updateCalendarYear({ year: this.calendarYear - 1 })
       } else {
-        this.calendarMonth = this.calendarMonth - 1
+        this.updateCalendarMonth({ month: this.calendarMonth - 1 })
       }
       this.saveState()
     },
     nextMonth() {
       if (this.calendarMonth === 12) {
-        this.calendarMonth = 1
-        this.calendarYear = this.calendarYear + 1
+        this.updateCalendarMonth({ month: 1 })
+        this.updateCalendarYear({ year: this.calendarYear + 1 })
       } else {
-        this.calendarMonth = this.calendarMonth + 1
+        this.updateCalendarMonth( { month: this.calendarMonth + 1 })
       }
       this.saveState()
     },
     newsMonth() {
       return (
-        (this.calendarYear === this.currentYear) &
-        (this.calendarMonth === this.currentMonth)
+        (this.calendarYear === this.$store.state.currentYear) &
+        (this.calendarMonth === this.$store.state.currentMonth)
       )
     },
     saveState() {
