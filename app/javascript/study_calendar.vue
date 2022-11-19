@@ -1,11 +1,13 @@
 <template>
   <div class="flex justify-center">
-    <div @click="previousMonth">
+    <div class="w-4" @click="previousMonth">
       <button class="hover:border-b-2 border-black"> ＜ </button>
     </div>
     <div class="text-center mb-3 w-48">{{ calendarYear }} 年 {{ calendarMonth }} 月</div>
-    <div @click="nextMonth">
+    <div v-if="!newsMonth()" class="w-4" @click="nextMonth">
       <button class="hover:border-b-2 border-black"> ＞ </button>
+    </div>
+    <div v-else class="w-4">
     </div>
   </div>
   <table class="w-full">
@@ -38,6 +40,8 @@ export default {
   name: 'StudyCalendar',
   data() {
     return {
+      currentYear: this.getCurrentYear(),
+      currentMonth: this.getCurrentMonth(),
       calendarYear: this.getCurrentYear(),
       calendarMonth: this.getCurrentMonth()
     }
@@ -49,17 +53,16 @@ export default {
       let id = 1
       let weekDay = 0
       this.calendarDates.forEach(function (date, i, ary) {
-        !date ? (date = { weekDay: weekDay }) : (date.weekDay = weekDay)
+        !date ? (date = { weekDay }) : (date.weekDay = weekDay)
         value.push(date)
         weekDay++
         if (value.length === 7 || i === ary.length - 1) {
-          weekArry.push({ id: id, value: value })
+          weekArry.push({ id, value })
           id++
           value = []
           weekDay = 0
         }
       })
-      console.log(weekArry)
       return weekArry
     },
     calendarDates() {
@@ -70,7 +73,7 @@ export default {
         }
       }
       for (let date = 1; date <= this.lastDate; date++) {
-        calendar.push({ date: date })
+        calendar.push({ date })
       }
       return calendar
     },
@@ -97,6 +100,7 @@ export default {
       } else {
         this.calendarMonth = this.calendarMonth - 1
       }
+      this.saveState()
     },
     nextMonth() {
       if (this.calendarMonth === 12){
@@ -105,6 +109,19 @@ export default {
       } else {
         this.calendarMonth = this.calendarMonth + 1
       }
+      this.saveState()
+    },
+    newsMonth() {
+      return (
+          this.calendarYear === this.currentYear & this.calendarMonth === this.currentMonth
+      )
+    },
+    saveState() {
+      const year = String(this.calendarYear)
+      const month = String(this.calendarMonth).padStart(2, '0')
+      const params = new URLSearchParams(location.search)
+      params.set('calendar', `${year}-${month}`)
+      history.replaceState(history.state, '', `?${params}${location.hash}`)
     }
   }
 }
