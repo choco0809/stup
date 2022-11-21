@@ -9,4 +9,4 @@ header.p-3.bg-header.text-base-content.rounded
             = image_tag current_user.image, class: 'rounded-full'
         ul.mt-3.p-2.shadow.menu.menu-compact.dropdown-content.bg-base-100.rounded-box.w-32.border-2 tabindex='0'
           li
-            = link_to 'ログアウト', log_out_path
+            = link_to 'ログアウト', log_out_path, data: { turbo_method: :delete }
