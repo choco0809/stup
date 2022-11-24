@@ -23,7 +23,7 @@ processes = []
 [[services]]
   http_checks = []
   internal_port = 8080
-  processes = ["app"]
+  processes = ["web"]
   protocol = "tcp"
   script_checks = []
   [services.concurrency]
@@ -49,3 +49,8 @@ processes = []
 [[statics]]
   guest_path = "/app/public"
   url_prefix = "/"
+
+[processes]
+web = "bundle exec rails server -b [::] -p 8080"
+slash_commands = "node app/javascript/commands/slash_commands.js"
+discord_bot = "node app/javascript/commands/discord_bot.js"
