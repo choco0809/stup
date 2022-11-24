@@ -2,8 +2,12 @@ const { REST, Routes } = require('discord.js')
 
 const commands = [
   {
-    name: 'ping',
-    description: 'Replies with Pong!'
+    name: 'start',
+    description: '学習時間の記録を開始します。'
+  },
+  {
+    name: 'end',
+    description: '学習時間の記録を終了します。'
   }
 ]
 
