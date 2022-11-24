@@ -6,7 +6,7 @@ export default createStore({
     currentMonth: '',
     calendarYear: '',
     calendarMonth: '',
-    calendar:[]
+    calendar: []
   },
   mutations: {
     updateCurrentYear(state) {
@@ -22,7 +22,7 @@ export default createStore({
       state.calendarMonth = payload.month
     },
     updateCalendar(state, payload) {
-      console.log("mutations$updateCalendar")
+      console.log('mutations$updateCalendar')
       state.calendar = payload.calendar
     }
   },
@@ -36,12 +36,12 @@ export default createStore({
   },
   actions: {
     setCurrentYearAndCalendarYear({ commit }) {
-      commit("updateCurrentYear")
-      commit("updateCalendarYear", { year: this.state.currentYear })
+      commit('updateCurrentYear')
+      commit('updateCalendarYear', { year: this.state.currentYear })
     },
     setCurrentMonthAndCalendarMonth({ commit }) {
-      commit("updateCurrentMonth")
-      commit("updateCalendarMonth", { month: this.state.currentMonth })
+      commit('updateCurrentMonth')
+      commit('updateCalendarMonth', { month: this.state.currentMonth })
     }
   }
 })

@@ -6,7 +6,7 @@
 import ChartVar from './components/ChartVer.vue'
 
 export default {
-  name: "ChartVar",
+  name: 'ChartVar',
   components: {
     ChartVar
   }
