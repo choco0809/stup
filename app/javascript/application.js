@@ -2,3 +2,4 @@
 import '@hotwired/turbo-rails'
 import './controllers'
 import './study_calendar'
+import './chart'

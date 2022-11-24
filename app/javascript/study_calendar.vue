@@ -28,8 +28,15 @@
         <td
           v-for="date in week.value"
           :key="date.weekDay"
-          class="border border-black h-12">
-          {{ date.date }}
+          class="border border-black h-16">
+          <div v-if="date.date">
+            <div class="">
+              {{ date.date }}
+            </div>
+            <div class="">
+              ー
+            </div>
+          </div>
         </td>
       </tr>
     </tbody>
@@ -64,6 +71,7 @@ export default {
           weekDay = 0
         }
       })
+      this.$store.commit("updateCalendar", { calendar: weekArry })
       return weekArry
     },
     calendarDates() {

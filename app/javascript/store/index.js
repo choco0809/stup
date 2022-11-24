@@ -5,7 +5,8 @@ export default createStore({
     currentYear: '',
     currentMonth: '',
     calendarYear: '',
-    calendarMonth: ''
+    calendarMonth: '',
+    calendar:[]
   },
   mutations: {
     updateCurrentYear(state) {
@@ -19,6 +20,10 @@ export default createStore({
     },
     updateCalendarMonth(state, payload) {
       state.calendarMonth = payload.month
+    },
+    updateCalendar(state, payload) {
+      console.log("mutations$updateCalendar")
+      state.calendar = payload.calendar
     }
   },
   getters: {

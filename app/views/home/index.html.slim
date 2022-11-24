@@ -1,7 +1,9 @@
 - if current_user
   = render 'shared/header'
-  .md:flex.justify-center.my-6
-    .md:w-96.mx-2
+  .md:flex.justify-center.my-12
+    .my-6.md:w-134.mx-10
       #study_calendar
+    .my-6.md:w-134.mx-10
+      #chart
 - else
   = render 'welcome/welcome'
