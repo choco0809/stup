@@ -4,7 +4,7 @@
       <button class="hover:border-b-2 border-black">＜</button>
     </div>
     <div class="text-center mb-3 w-48">
-      {{ this.calendarYear }} 年 {{ calendarMonth }} 月
+      {{ calendarYear }} 年 {{ calendarMonth }} 月
     </div>
     <div v-if="!newsMonth()" class="w-4" @click="nextMonth">
       <button class="hover:border-b-2 border-black">＞</button>
