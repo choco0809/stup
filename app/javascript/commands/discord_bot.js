@@ -2,7 +2,7 @@ const { Client, GatewayIntentBits } = require('discord.js')
 const client = new Client({ intents: [GatewayIntentBits.Guilds] })
 
 client.on('ready', () => {
-  console.log(`Logged in as ${client.user.tag}!`)
+  console.log(`Discord Botを起動しました。`)
 })
 
 client.on('interactionCreate', async (interaction) => {

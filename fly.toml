@@ -9,6 +9,7 @@ processes = []
   [build.args]
     BUILD_COMMAND = "bin/rails fly:build"
     SERVER_COMMAND = "bin/rails fly:server"
+    NODE_VERSION = "17"
 
 [deploy]
   release_command = "bin/rails fly:release"
@@ -52,5 +53,4 @@ processes = []
 
 [processes]
 web = "bundle exec rails server -b [::] -p 8080"
-slash_commands = "node app/javascript/commands/slash_commands.js"
-discord_bot = "node app/javascript/commands/discord_bot.js"
+discord_bot = "node ./app/javascript/commands/discord_bot.js"
