@@ -22,7 +22,6 @@ export default createStore({
       state.calendarMonth = payload.month
     },
     updateCalendar(state, payload) {
-      console.log('mutations$updateCalendar')
       state.calendar = payload.calendar
     }
   },
