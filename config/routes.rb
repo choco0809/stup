@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   resources :sessions, only: %i[create destroy]
 
   namespace :api, {format: 'json'} do
-    resources :study_time_records, only: %i[create]
+    resource :discord_study_time_records, only: %i[create update]
+    resources :study_time_records, only: %i[create update]
   end
 end
