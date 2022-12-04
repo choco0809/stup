@@ -10,14 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_24_101045) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_04_213722) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "study_time_records", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.datetime "started_at"
-    t.datetime "{:null=>false}"
+    t.datetime "started_at", null: false
     t.datetime "ended_at"
     t.string "memo"
     t.datetime "created_at", null: false
