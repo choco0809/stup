@@ -6,7 +6,7 @@ function endCommand(client) {
 
     const nowDate = new Date()
     if (interaction.commandName === 'end') {
-      fetch('http://localhost:3000/api/discord_study_time_records', {
+      fetch('https://stup.fly.dev/api/discord_study_time_records', {
         method: 'PATCH',
         body: JSON.stringify({
           uid: interaction.user.id,
