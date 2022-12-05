@@ -28,11 +28,12 @@ group :development, :test do
   gem 'debug', platforms: %i[mri mingw x64_mingw]
 
   # not default
+  gem 'factory_bot_rails'
+  gem 'rspec-rails'
   gem 'rubocop', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
   gem 'rubocop-rspec', require: false
-  gem 'rspec-rails'
   gem 'slim_lint'
 end
 
