@@ -29,6 +29,7 @@ group :development, :test do
 
   # not default
   gem 'factory_bot_rails'
+  gem 'faker'
   gem 'rspec-rails'
   gem 'rubocop', require: false
   gem 'rubocop-performance', require: false
