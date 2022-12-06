@@ -37,7 +37,7 @@ jobs:
           command: yarn lint
   test:
     docker:
-      - image: cimg/postgres:14.2
+      - image: cimg/ruby:3.1.1-browsers
         environment:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -65,10 +65,10 @@ jobs:
           command: 'dockerize -wait tcp://localhost:5432 -timeout 1m'
       - run:
           name: Database setup
-          command: bundle exec rails db:setup
+          command: 'bundle exec rails db:setup'
       - run:
           name: RSpec
-          command: bundle exec rspec
+          command: 'bundle exec rspec'
 workflows:
   build_and_test:
     jobs:
