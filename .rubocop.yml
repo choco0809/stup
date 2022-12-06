@@ -8,6 +8,7 @@ Metrics/BlockLength:
 AllCops:
   NewCops: enable
   Exclude:
+    - '**/vendor/**/*'
     - app/views/**/*
     - config/**/*
     - config.ru
