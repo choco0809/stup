@@ -15,24 +15,24 @@ jobs:
           node-version: '17.0.0'
       - node/install-packages:
           pkg-manager: yarn
-    check:
-      docker:
-        - image: cimg/ruby:3.1.1-node
-      steps:
-        - checkout
-        - ruby/install-deps
-        - ruby/rubocop-check:
-            format: progress
-            label: Inspecting with Rubocop
-        - run:
-            name: Slim Lint
-            command: bundle exec slim-lint app/views
-        - node/install:
-            install-yarn: true
-            node-version: '17.0.0'
-        - run:
-            name: Lint
-            command: bin/yarn lint
+  check:
+    docker:
+      - image: cimg/ruby:3.1.1-node
+    steps:
+      - checkout
+      - ruby/install-deps
+      - ruby/rubocop-check:
+          format: progress
+          label: Inspecting with Rubocop
+      - run:
+          name: Slim Lint
+          command: bundle exec slim-lint app/views
+      - node/install:
+          install-yarn: true
+          node-version: '17.0.0'
+      - run:
+          name: Lint
+          command: bin/yarn lint
 workflows:
   build_and_test:
     jobs:
