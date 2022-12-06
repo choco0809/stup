@@ -38,6 +38,7 @@ jobs:
   test:
     docker:
       - image: cimg/postgres:14.2
+        environment:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: ci_test
