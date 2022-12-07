@@ -32,7 +32,7 @@ module Api
         end
       end
 
-    private
+      private
 
       def check_ready_started?(records)
         !records.empty? && records.last.ended_at.nil?
