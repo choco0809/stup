@@ -6,7 +6,7 @@ function startCommand(client) {
 
     const nowDate = new Date()
     if (interaction.commandName === 'start') {
-      fetch('https://stup.fly.dev/api/discord_study_time_records', {
+      fetch('https://stup.fly.dev/api/discord/study_time_records', {
         method: 'POST',
         body: JSON.stringify({
           uid: interaction.user.id,
