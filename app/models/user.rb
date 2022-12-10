@@ -5,19 +5,7 @@ class User < ApplicationRecord
 
   class << self
     def find_or_create_from_auth_hash(auth_hash)
-      user_params = user_params_from_auth_hash(auth_hash)
-      find_or_create_by(uid: user_params[:uid]) do |user|
-        user.update(user_params)
-      end
-    end
-
-    private
-
-    def user_params_from_auth_hash(auth_hash)
-      {
-        uid: auth_hash.uid,
-        image: auth_hash.info.image
-      }
+      find_or_create_by(uid: auth_hash[:uid], image: auth_hash[:info][:image])
     end
   end
 end

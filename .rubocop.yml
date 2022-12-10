@@ -4,6 +4,7 @@ Style/Documentation:
 Metrics/BlockLength:
   Exclude:
     - test/**/*
+    - spec/**/*
 
 AllCops:
   NewCops: enable
