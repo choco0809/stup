@@ -64,6 +64,9 @@ jobs:
       - node/install-packages:
           pkg-manager: yarn
       - run:
+          name: webpack build
+          command: 'npm run build'
+      - run:
           name: tailwindcss compile
           command: 'npm run build:css'
       - run:
