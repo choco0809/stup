@@ -64,6 +64,9 @@ jobs:
       - node/install-packages:
           pkg-manager: yarn
       - run:
+          name: tailwindcss compile
+          command: 'npm run build:css'
+      - run:
           name: Wait for DB
           command: 'dockerize -wait tcp://localhost:5432 -timeout 1m'
       - run:
