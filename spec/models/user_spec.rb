@@ -47,7 +47,7 @@ RSpec.describe 'Userモデルのテスト', type: :model do
         expect(user).to eq created_user
       end
       it 'Userモデルのレコード件数が変化しないこと' do
-        expect { User.find_or_create_from_auth_hash(auth_hash) }.not_to change(User, :count)
+        expect { User.find_or_create_from_auth_hash(auth_hash) }.to change(User, :count)
       end
     end
   end
