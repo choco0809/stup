@@ -3,6 +3,7 @@ version: 2.1
 orbs:
   ruby: circleci/ruby@2.0.0
   node: circleci/node@5.0.3
+  browser-tools: circleci/browser-tools@1.4.0
 jobs:
   build:
     docker:
@@ -53,6 +54,8 @@ jobs:
       DATABASE_URL: "postgres://postgres:postgres@localhost/ci_test"
       TZ: Asia/Tokyo
     steps:
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
       - checkout
       - ruby/install-deps
       - node/install:
@@ -60,6 +63,12 @@ jobs:
           node-version: '17.0.0'
       - node/install-packages:
           pkg-manager: yarn
+      - run:
+          name: webpack build
+          command: 'npm run build'
+      - run:
+          name: tailwindcss compile
+          command: 'npm run build:css'
       - run:
           name: Wait for DB
           command: 'dockerize -wait tcp://localhost:5432 -timeout 1m'
@@ -74,4 +83,6 @@ workflows:
     jobs:
       - build
       - check
-      - test
+      - test:
+          requires:
+            - build
