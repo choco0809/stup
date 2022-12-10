@@ -77,4 +77,6 @@ workflows:
     jobs:
       - build
       - check
-      - test
+      - test:
+          requires:
+            - build
