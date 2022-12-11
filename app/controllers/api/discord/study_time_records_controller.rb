@@ -6,7 +6,7 @@ module Api
       before_action :set_user
 
       def create
-        return render status: :ok, json: { message: 'ユーザーが未登録です。' } if @user.nil?
+        return render status: :ok, json: { message: 'ユーザーが未登録です' } if @user.nil?
 
         records = StudyTimeRecord.where(user_id: @user.id)
         return render status: :ok, json: { message: '前回の学習記録が終了していません' } if check_ready_started?(records)
@@ -20,13 +20,14 @@ module Api
       end
 
       def update
-        return render status: :ok, json: { message: 'ユーザーが未登録です。' } if @user.nil?
+        return render status: :ok, json: { message: 'ユーザーが未登録です' } if @user.nil?
 
         records = StudyTimeRecord.where(user_id: @user.id).last
-        return render status: :ok, json: { message: '学習が開始していません' } if check_ready_ended?(records)
+
+        return render status: :ok, json: { message: '学習が開始されていません' } if check_ready_ended?(records)
 
         if records.update(ended_at: params[:ended_at])
-          render status: :ok, json: { message: '学習が終了しました。' }
+          render status: :ok, json: { message: '学習が終了しました' }
         else
           render status: :ok, json: { message: 'エラーメッセージ' }
         end
@@ -39,7 +40,7 @@ module Api
       end
 
       def check_ready_ended?(records)
-        !records.nil? && !records.ended_at.nil?
+        records.nil? || !records.ended_at.nil?
       end
 
       def set_user
