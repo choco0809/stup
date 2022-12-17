@@ -2,12 +2,16 @@
 
 module Api
   class StudyTimeRecordsController < ActionController::API
-    def create
-      # vue.jsからのAPI
-    end
+    include SessionsHelper
 
-    def update
-      # vue.jsからのAPI
+    def show
+      year = params[:year]
+      month = params[:month]
+      @study_time_records = if month.nil?
+                              StudyTimeRecord.annual_study_records(current_user, year)
+                            else
+                              StudyTimeRecord.monthly_study_records(current_user, year, month)
+                            end
     end
   end
 end
