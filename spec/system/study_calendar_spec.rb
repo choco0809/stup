@@ -37,10 +37,7 @@ RSpec.describe 'StudyCalender', type: :system do
       visit root_path
       click_on '学習を記録する'
       visit '/?calendar=2022-11'
-      expect(page).to have_selector 'th', text: '日'
-      page.save_screenshot
-      expect( 1 + 1 ).to eq 2
+      expect(page.all('.study-time')[15]).to have_content '60分'
     end
   end
-
 end
