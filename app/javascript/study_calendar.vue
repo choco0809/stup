@@ -11,7 +11,7 @@
     </div>
     <div v-else class="w-4"></div>
   </div>
-  <table class="w-full">
+  <table class="w-full table-fixed">
     <thead>
       <tr class="bg-base-200">
         <th class="border border-black w-1/7">日</th>
@@ -29,11 +29,15 @@
           v-for="date in week.value"
           :key="date.weekDay"
           class="border border-black h-16">
-          <div v-if="date.date">
-            <div class="">
+          <div v-if="date.date" class="study-ask">
+            <div>
               {{ date.date }}
             </div>
-            <div class="">ー</div>
+            <div class="study-time">
+              <div v-if="futureDate(date.date)">▲</div>
+              <div v-else-if="studyTimesLength(date.dailyStudyTime)">ー</div>
+              <div v-else>{{ totalStudyTimes(date.dailyStudyTime) }}分</div>
+            </div>
           </div>
         </td>
       </tr>
@@ -47,7 +51,7 @@ import { mapGetters, mapMutations, mapActions } from 'vuex'
 export default {
   name: 'StudyCalendar',
   computed: {
-    ...mapGetters(['calendarYear', 'calendarMonth']),
+    ...mapGetters(['calendarYear', 'calendarMonth', 'monthlyStudyTime']),
     calendarWeeks() {
       const weekArry = []
       let value = []
@@ -75,7 +79,16 @@ export default {
         }
       }
       for (let date = 1; date <= this.lastDate; date++) {
-        calendar.push({ date })
+        const dailyStudyTime = this.monthlyStudyTime.filter(
+          (studyTimeRecord) => {
+            return studyTimeRecord.started_at.includes(
+              `${this.calendarYear}-${this.calendarMonth}-${this.formatDay(
+                date
+              )}`
+            )
+          }
+        )
+        calendar.push({ date, dailyStudyTime })
       }
       return calendar
     },
@@ -92,9 +105,14 @@ export default {
     this.setCurrentYearAndCalendarYear()
     this.setCurrentMonthAndCalendarMonth()
     this.loadState()
+    this.fetchMonthlyStudyTimeRecords()
   },
   methods: {
-    ...mapMutations(['updateCalendarYear', 'updateCalendarMonth']),
+    ...mapMutations([
+      'updateCalendarYear',
+      'updateCalendarMonth',
+      'updateMonthlyStudyTime'
+    ]),
     ...mapActions([
       'setCurrentYearAndCalendarYear',
       'setCurrentMonthAndCalendarMonth'
@@ -115,8 +133,9 @@ export default {
       this.updateCalendarYear({ year })
       this.updateCalendarMonth({ month })
     },
-    getCurrentMonth() {
-      return new Date().getMonth() + 1
+    token() {
+      const meta = document.querySelector('meta[name="csrf-token"]')
+      return meta ? meta.getAttribute('content') : ''
     },
     previousMonth() {
       if (this.calendarMonth === 1) {
@@ -126,6 +145,7 @@ export default {
         this.updateCalendarMonth({ month: this.calendarMonth - 1 })
       }
       this.saveState()
+      this.fetchMonthlyStudyTimeRecords()
     },
     nextMonth() {
       if (this.calendarMonth === 12) {
@@ -135,6 +155,7 @@ export default {
         this.updateCalendarMonth({ month: this.calendarMonth + 1 })
       }
       this.saveState()
+      this.fetchMonthlyStudyTimeRecords()
     },
     newsMonth() {
       return (
@@ -148,6 +169,62 @@ export default {
       const params = new URLSearchParams(location.search)
       params.set('calendar', `${year}-${month}`)
       history.replaceState(history.state, '', `?${params}${location.hash}`)
+    },
+    fetchMonthlyStudyTimeRecords() {
+      fetch(
+        `/api/study_time_records?year=${this.calendarYear}&month=${this.calendarMonth}`,
+        {
+          method: 'GET',
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-Token': this.token()
+          },
+          credentials: 'same-origin'
+        }
+      )
+        .then((response) => {
+          return response.json()
+        })
+        .then((json) => {
+          this.updateMonthlyStudyTime({ monthlyStudyTime: json })
+        })
+        .catch((error) => {
+          console.warn(error)
+        })
+    },
+    formatDay(day) {
+      return day.toString().padStart(2, '0')
+    },
+    formatMonth(month) {
+      return month.toString().padStart(2, '0')
+    },
+    studyTimesLength(studyTimes) {
+      return studyTimes.length === 0
+    },
+    totalStudyTimes(studyTimes) {
+      const totalStudyTime = studyTimes.reduce(function (sum, records) {
+        const startedAt = new Date(records.started_at)
+        const endedAt = new Date(records.ended_at)
+        const studyTime = Math.floor((endedAt - startedAt) / 1000 / 60)
+        return sum + studyTime
+      }, 0)
+
+      return totalStudyTime
+    },
+    futureDate(date) {
+      const nowDate = this.getFormattedNowDate()
+      const targetDate =
+        this.calendarYear +
+        this.formatMonth(this.calendarMonth) +
+        this.formatDay(date)
+      return targetDate > nowDate
+    },
+    getFormattedNowDate() {
+      const nowDate = new Date()
+      const year = nowDate.getFullYear()
+      const month = this.formatMonth(nowDate.getMonth() + 1)
+      const day = this.formatDay(nowDate.getDate())
+      return year + month + day
     }
   }
 }

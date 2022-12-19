@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
-  has_many :study_time_records
+  has_many :study_time_records, foreign_key: :user_id
   validates :uid, presence: true
 
   class << self
