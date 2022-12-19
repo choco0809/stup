@@ -34,11 +34,9 @@
               {{ date.date }}
             </div>
             <div class="study-time">
-              <div v-if="this.futureDate(date.date)"> ▲ </div>
-              <div v-else-if="studyTimesLength(date.dailyStudyTime)"> ー </div>
-              <div v-else>
-                {{ totalStudyTimes(date.dailyStudyTime) }}分
-              </div>
+              <div v-if="futureDate(date.date)">▲</div>
+              <div v-else-if="studyTimesLength(date.dailyStudyTime)">ー</div>
+              <div v-else>{{ totalStudyTimes(date.dailyStudyTime) }}分</div>
             </div>
           </div>
         </td>
@@ -81,12 +79,16 @@ export default {
         }
       }
       for (let date = 1; date <= this.lastDate; date++) {
-        const dailyStudyTime = this.monthlyStudyTime.filter((studyTimeRecord) => {
-          return studyTimeRecord.started_at.includes(
-              `${this.calendarYear}-${this.calendarMonth}-${this.formatDay(date)}`
-          )
-        })
-        calendar.push({ date, dailyStudyTime: dailyStudyTime })
+        const dailyStudyTime = this.monthlyStudyTime.filter(
+          (studyTimeRecord) => {
+            return studyTimeRecord.started_at.includes(
+              `${this.calendarYear}-${this.calendarMonth}-${this.formatDay(
+                date
+              )}`
+            )
+          }
+        )
+        calendar.push({ date, dailyStudyTime })
       }
       return calendar
     },
@@ -106,7 +108,11 @@ export default {
     this.fetchMonthlyStudyTimeRecords()
   },
   methods: {
-    ...mapMutations(['updateCalendarYear', 'updateCalendarMonth', 'updateMonthlyStudyTime']),
+    ...mapMutations([
+      'updateCalendarYear',
+      'updateCalendarMonth',
+      'updateMonthlyStudyTime'
+    ]),
     ...mapActions([
       'setCurrentYearAndCalendarYear',
       'setCurrentMonthAndCalendarMonth'
@@ -165,23 +171,26 @@ export default {
       history.replaceState(history.state, '', `?${params}${location.hash}`)
     },
     fetchMonthlyStudyTimeRecords() {
-      fetch(`/api/study_time_records?year=${this.calendarYear}&month=${this.calendarMonth}`, {
-        method: 'GET',
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest',
-          'X-CSRF-Token': this.token()
-        },
-        credentials: 'same-origin'
-      })
-          .then((response) => {
-            return response.json()
-          })
-          .then((json) => {
-            this.updateMonthlyStudyTime( {monthlyStudyTime: json})
-          })
-          .catch((error) => {
-            console.warn(error)
-          })
+      fetch(
+        `/api/study_time_records?year=${this.calendarYear}&month=${this.calendarMonth}`,
+        {
+          method: 'GET',
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-Token': this.token()
+          },
+          credentials: 'same-origin'
+        }
+      )
+        .then((response) => {
+          return response.json()
+        })
+        .then((json) => {
+          this.updateMonthlyStudyTime({ monthlyStudyTime: json })
+        })
+        .catch((error) => {
+          console.warn(error)
+        })
     },
     formatDay(day) {
       return day.toString().padStart(2, '0')
@@ -190,21 +199,24 @@ export default {
       return month.toString().padStart(2, '0')
     },
     studyTimesLength(studyTimes) {
-      return (studyTimes.length === 0 ? true : false)
+      return studyTimes.length === 0
     },
     totalStudyTimes(studyTimes) {
-        const totalStudyTime = studyTimes.reduce(function (sum, records){
-          const started_at = new Date(records.started_at)
-          const ended_at = new Date(records.ended_at)
-          const study_time = Math.floor((ended_at - started_at) / 1000 / 60)
-          return sum + study_time
-      },0)
+      const totalStudyTime = studyTimes.reduce(function (sum, records) {
+        const startedAt = new Date(records.started_at)
+        const endedAt = new Date(records.ended_at)
+        const studyTime = Math.floor((endedAt - startedAt) / 1000 / 60)
+        return sum + studyTime
+      }, 0)
 
       return totalStudyTime
     },
     futureDate(date) {
       const nowDate = this.getFormattedNowDate()
-      const targetDate = this.calendarYear + this.formatMonth(this.calendarMonth) + this.formatDay(date)
+      const targetDate =
+        this.calendarYear +
+        this.formatMonth(this.calendarMonth) +
+        this.formatDay(date)
       return targetDate > nowDate
     },
     getFormattedNowDate() {
@@ -212,7 +224,7 @@ export default {
       const year = nowDate.getFullYear()
       const month = this.formatMonth(nowDate.getMonth() + 1)
       const day = this.formatDay(nowDate.getDate())
-      return (year + month + day)
+      return year + month + day
     }
   }
 }
