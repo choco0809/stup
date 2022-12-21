@@ -4,13 +4,12 @@ function startCommand(client) {
   client.on('interactionCreate', async (interaction) => {
     if (!interaction.isChatInputCommand()) return
 
-    const nowDate = new Date()
     if (interaction.commandName === 'start') {
       fetch('https://stup.fly.dev/api/discord/study_time_record', {
         method: 'POST',
         body: JSON.stringify({
           uid: interaction.user.id,
-          started_at: nowDate.toLocaleString()
+          started_at: new Date()
         }),
         headers: {
           'Content-Type': 'application/json'

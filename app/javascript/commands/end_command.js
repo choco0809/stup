@@ -4,13 +4,12 @@ function endCommand(client) {
   client.on('interactionCreate', async (interaction) => {
     if (!interaction.isChatInputCommand()) return
 
-    const nowDate = new Date()
     if (interaction.commandName === 'end') {
       fetch('https://stup.fly.dev/api/discord/study_time_record', {
         method: 'PATCH',
         body: JSON.stringify({
           uid: interaction.user.id,
-          ended_at: nowDate.toLocaleString()
+          ended_at: new Date()
         }),
 
         headers: {
