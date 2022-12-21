@@ -203,10 +203,14 @@ export default {
     },
     totalStudyTimes(studyTimes) {
       const totalStudyTime = studyTimes.reduce(function (sum, records) {
-        const startedAt = new Date(records.started_at)
-        const endedAt = new Date(records.ended_at)
-        const studyTime = Math.floor((endedAt - startedAt) / 1000 / 60)
-        return sum + studyTime
+        if (records.ended_at == null) {
+          return 0
+        } else {
+          const startedAt = new Date(records.started_at)
+          const endedAt = new Date(records.ended_at)
+          const studyTime = Math.floor((endedAt - startedAt) / 1000 / 60)
+          return sum + studyTime
+        }
       }, 0)
 
       return totalStudyTime
