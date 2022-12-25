@@ -38,9 +38,9 @@
               <div v-else-if="studyTimesLength(date.dailyStudyTime)">
                 <button @click="openModal(date)">ー</button>
                 <StudyTimeRecordsModal
-                  :date="modalDate"
-                  :dailyStudyTimeRecords="modalItems"
                   v-show="showModal"
+                  :date="modalDate"
+                  :daily-study-time-records="modalItems"
                   @close="closeModal"></StudyTimeRecordsModal>
               </div>
               <div v-else>
@@ -48,9 +48,9 @@
                   {{ totalStudyTimes(date.dailyStudyTime) }}分
                 </button>
                 <StudyTimeRecordsModal
-                  :date="modalDate"
-                  :dailyStudyTimeRecords="modalItems"
                   v-show="showModal"
+                  :date="modalDate"
+                  :daily-study-time-records="modalItems"
                   @close="closeModal"></StudyTimeRecordsModal>
               </div>
             </div>

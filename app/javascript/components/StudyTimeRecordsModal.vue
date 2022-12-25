@@ -32,7 +32,9 @@
               <th class="border border-black 1/3">学習時間</th>
             </tr>
           </thead>
-          <tbody v-for="studyTimeRecords in dailyStudyTimeRecords" :key="studyTimeRecords.id">
+          <tbody
+            v-for="studyTimeRecords in dailyStudyTimeRecords"
+            :key="studyTimeRecords.id">
             <tr>
               <td class="border border-black 1/3">
                 {{ formatStartAndEndAt(studyTimeRecords.started_at) }}
@@ -56,12 +58,19 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'StudyTimeRecordsModal',
-  // props: ['date', `dailyStudyTimeRecords`],
   props: {
-    date: String,
-    dailyStudyTimeRecords: Object
+    date: {
+      type: String,
+      require: true,
+      default: ''
+    },
+    dailyStudyTimeRecords: {
+      type: Object,
+      require: true,
+      default: () => {}
+    }
   },
-  emits:['close'],
+  emits: ['close'],
   computed: {
     ...mapGetters(['calendarYear', 'calendarMonth', 'monthlyStudyTime'])
   },
