@@ -32,16 +32,16 @@
               <th class="border border-black 1/3">学習時間</th>
             </tr>
           </thead>
-          <tbody v-for="date in dailyStudyTimeRecords" :key="date.id">
+          <tbody v-for="studyTimeRecords in dailyStudyTimeRecords" :key="studyTimeRecords.id">
             <tr>
               <td class="border border-black 1/3">
-                {{ this.formatStartAndEndAt(date.started_at) }}
+                {{ formatStartAndEndAt(studyTimeRecords.started_at) }}
               </td>
               <td class="border border-black 1/3">
-                {{ this.formatStartAndEndAt(date.ended_at) }}
+                {{ formatStartAndEndAt(studyTimeRecords.ended_at) }}
               </td>
               <td class="border border-black 1/3">
-                {{ this.calculateStudyTime(date) }} 分
+                {{ calculateStudyTime(studyTimeRecords) }} 分
               </td>
             </tr>
           </tbody>
@@ -52,11 +52,16 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'StudyTimeRecordsModal',
-  props: ['date', `dailyStudyTimeRecords`],
+  // props: ['date', `dailyStudyTimeRecords`],
+  props: {
+    date: String,
+    dailyStudyTimeRecords: Object
+  },
+  emits:['close'],
   computed: {
     ...mapGetters(['calendarYear', 'calendarMonth', 'monthlyStudyTime'])
   },
@@ -65,13 +70,17 @@ export default {
       const targetDate = new Date(timeStamp)
       const hh = this.formatHours(targetDate.getHours())
       const mm = this.formatMinutes(targetDate.getMinutes())
-      return `${hh}:${mm}`
+      const ss = this.formatSeconds(targetDate.getSeconds())
+      return `${hh}:${mm}:${ss}`
     },
     formatHours(hours) {
       return hours.toString().padStart(2, '0')
     },
     formatMinutes(minutes) {
       return minutes.toString().padStart(2, '0')
+    },
+    formatSeconds(seconds) {
+      return seconds.toString().padStart(2, '0')
     },
     calculateStudyTime(record) {
       const startedAt = new Date(record.started_at)
