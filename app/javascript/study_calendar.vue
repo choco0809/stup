@@ -35,8 +35,24 @@
             </div>
             <div class="study-time">
               <div v-if="futureDate(date.date)">▲</div>
-              <div v-else-if="studyTimesLength(date.dailyStudyTime)">ー</div>
-              <div v-else>{{ totalStudyTimes(date.dailyStudyTime) }}分</div>
+              <div v-else-if="studyTimesLength(date.dailyStudyTime)">
+                <button @click="openModal(date)">ー</button>
+                <StudyTimeRecordsModal
+                  v-show="showModal"
+                  :date="modalDate"
+                  :daily-study-time-records="modalItems"
+                  @close="closeModal"></StudyTimeRecordsModal>
+              </div>
+              <div v-else>
+                <button @click="openModal(date)">
+                  {{ totalStudyTimes(date.dailyStudyTime) }}分
+                </button>
+                <StudyTimeRecordsModal
+                  v-show="showModal"
+                  :date="modalDate"
+                  :daily-study-time-records="modalItems"
+                  @close="closeModal"></StudyTimeRecordsModal>
+              </div>
             </div>
           </div>
         </td>
@@ -46,10 +62,19 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapActions } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
+import StudyTimeRecordsModal from './components/StudyTimeRecordsModal.vue'
 
 export default {
   name: 'StudyCalendar',
+  components: { StudyTimeRecordsModal },
+  data() {
+    return {
+      showModal: false,
+      modalDate: '',
+      modalItems: []
+    }
+  },
   computed: {
     ...mapGetters(['calendarYear', 'calendarMonth', 'monthlyStudyTime']),
     calendarWeeks() {
@@ -202,7 +227,7 @@ export default {
       return studyTimes.length === 0
     },
     totalStudyTimes(studyTimes) {
-      const totalStudyTime = studyTimes.reduce(function (sum, records) {
+      return studyTimes.reduce(function (sum, records) {
         if (records.ended_at == null) {
           return sum + 0
         } else {
@@ -212,8 +237,6 @@ export default {
           return sum + studyTime
         }
       }, 0)
-
-      return totalStudyTime
     },
     futureDate(date) {
       const nowDate = this.getFormattedNowDate()
@@ -229,6 +252,14 @@ export default {
       const month = this.formatMonth(nowDate.getMonth() + 1)
       const day = this.formatDay(nowDate.getDate())
       return year + month + day
+    },
+    openModal(date) {
+      this.showModal = true
+      this.modalDate = date.date
+      this.modalItems = date.dailyStudyTime
+    },
+    closeModal() {
+      this.showModal = false
     }
   }
 }
