@@ -9,7 +9,7 @@ function endCommand(client) {
         method: 'PATCH',
         body: JSON.stringify({
           uid: interaction.user.id,
-          ended_at: new Date()
+          ended_at: truncateSeconds(new Date())
         }),
 
         headers: {
@@ -27,6 +27,15 @@ function endCommand(client) {
         })
     }
   })
+}
+
+function truncateSeconds(date) {
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+  const hours = date.getHours()
+  const minutes = date.getMinutes()
+  return new Date(`${year}/${month}/${day} ${hours}:${minutes}`)
 }
 
 module.exports = endCommand
