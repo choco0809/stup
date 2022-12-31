@@ -24,47 +24,50 @@
             </button>
           </div>
         </div>
-        <div v-if="createModal" class="p-10 h-60 overflow-y-auto">
-          <table class="w-full table-fixed">
-            <thead>
-            <tr class="bg-base-200">
-              <th class="border border-black">開始時間</th>
-              <th class="border border-black">終了時間</th>
-              <th class="border border-black">学習時間</th>
-              <th class="border border-black w-2/5">memo</th>
-            </tr>
-            </thead>
-            <tbody
-                v-for="studyTimeRecords in dailyStudyTimeRecords"
-                :key="studyTimeRecords.id">
-            <tr>
-              <td class="border border-black text-center">
-                {{ formatStartAndEndAt(studyTimeRecords.started_at) }}
-              </td>
-              <td class="border border-black text-center">
-                {{ formatStartAndEndAt(studyTimeRecords.ended_at) }}
-              </td>
-              <td v-if="calculateStudyTime(studyTimeRecords) !== null" class="border border-black text-center">
-                {{ calculateStudyTime(studyTimeRecords) }} 分
-              </td>
-              <td v-else class="border border-black text-center"></td>
-              <td class="border border-black text-center">
-              </td>
-              <td class="text-center">
-                <button class="btn btn-info" @click="fetchDailyStudyTimeRecords(studyTimeRecords)">削除</button>
-              </td>
-              <td>
-                <button class="btn btn-warning">編集</button>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-          <div class="pt-10" v-if="finishedStudyTime(dailyStudyTimeRecords)">
+        <div v-if="createModal" class="p-10">
+          <div class="h-60 overflow-y-auto">
+            <table class="w-full table-fixed">
+              <thead>
+              <tr class="bg-base-200">
+                <th class="border border-black">開始時間</th>
+                <th class="border border-black">終了時間</th>
+                <th class="border border-black">学習時間</th>
+                <th class="border border-black w-2/5">memo</th>
+              </tr>
+              </thead>
+              <tbody
+                  v-for="studyTimeRecords in dailyStudyTimeRecords"
+                  :key="studyTimeRecords.id">
+              <tr>
+                <td class="border border-black text-center">
+                  {{ formatStartAndEndAt(studyTimeRecords.started_at) }}
+                </td>
+                <td class="border border-black text-center">
+                  {{ formatStartAndEndAt(studyTimeRecords.ended_at) }}
+                </td>
+                <td v-if="calculateStudyTime(studyTimeRecords) !== null" class="border border-black text-center">
+                  {{ calculateStudyTime(studyTimeRecords) }} 分
+                </td>
+                <td v-else class="border border-black text-center"></td>
+                <td class="border border-black text-center">
+                </td>
+                <td class="text-center">
+                  <button class="btn btn-info" @click="fetchDailyStudyTimeRecords(studyTimeRecords)">削除</button>
+                </td>
+                <td>
+                  <button class="btn btn-warning">編集</button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="text-center" v-if="finishedStudyTime(dailyStudyTimeRecords)">
             <button class="btn btn-warning" @click="openCreateModal()">新規作成</button>
           </div>
         </div>
         <div v-else>
-          <CreateStudyTimeRecord />
+          <CreateStudyTimeRecord :date="date">
+          </CreateStudyTimeRecord>
         </div>
       </div>
     </div>
