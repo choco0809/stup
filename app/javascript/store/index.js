@@ -37,6 +37,9 @@ export default createStore({
       state.monthlyStudyTime = result
 
     },
+    addStudyTimeRecord(state, payload){
+      state.monthlyStudyTime.push(payload.studyTimeRecord)
+    },
     openShowModal(state) {
       state.showModal = true
     },
