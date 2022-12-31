@@ -24,7 +24,7 @@
             </button>
           </div>
         </div>
-        <div v-if="createModal" class="p-10">
+        <div v-if="createModal" class="p-10 h-60 overflow-y-auto">
           <table class="w-full table-fixed">
             <thead>
             <tr class="bg-base-200">
@@ -95,7 +95,7 @@ export default {
     ...mapGetters(['calendarYear', 'calendarMonth', 'monthlyStudyTime', 'createModal'])
   },
   methods: {
-    ...mapMutations(['openCreateStudyRecordModal']),
+    ...mapMutations(['openCreateStudyRecordModal','deleteStudyTimeRecord','closeShowModal']),
     token() {
       const meta = document.querySelector('meta[name="csrf-token"]')
       return meta ? meta.getAttribute('content') : ''
@@ -135,19 +135,21 @@ export default {
             credentials: 'same-origin'
           }
       )
-        .then(() => {
-          document.location.reload()
-        })
-        .catch((error) => {
-          console.warn(error)
-        })
+          .then((response) => {
+            return response.json()
+          })
+          .then((json) => {
+            this.deleteStudyTimeRecord({record: json})
+            this.closeShowModal()
+          })
+          .catch((error) => {
+            console.warn(error)
+          })
     },
     finishedStudyTime(record) {
-      // 終了していないレコードがあれば新規作成ボタンを表示させない
       if (record.length === 0) return true
       for (const elem of record) {
         if (elem.ended_at === null)
-          // 学習が終了していない場合
           return false
       }
       return true

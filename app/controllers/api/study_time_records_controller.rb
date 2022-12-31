@@ -4,6 +4,13 @@ module Api
   class StudyTimeRecordsController < ActionController::API
     include SessionsHelper
 
+    def destroy
+      @user = User.find(current_user.id)
+      @study_time_record = @user.study_time_records.find(params[:id])
+      @study_time_record.destroy
+      @study_time_record
+    end
+
     def show
       year = params[:year]
       month = params[:month]
