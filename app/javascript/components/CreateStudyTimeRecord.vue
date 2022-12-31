@@ -22,7 +22,7 @@
       <div class="text-center w-1/3">終了時間</div>
       <div class="w-2/3">
         <span class="border p-1">
-          <select v-model="endedHours" class="bg-base-200 w-28 text-center2">
+          <select v-model="endedHours" class="bg-base-200 w-28 text-center">
             <option v-for="(text,value) in timeBox(24)" :value="value" :v-text="text">
               {{ text }}
             </option>
@@ -37,14 +37,14 @@
       </div>
     </div>
     <div class="p-5">
-      <button class="btn btn-info" @click="debug()">作成</button>
+      <button class="btn btn-info" @click="newStudyTimeRecord()">作成</button>
     </div>
   </div>
 </template>
 
 <script>
 
-import {mapGetters} from 'vuex'
+import {mapGetters, mapMutations} from 'vuex'
 
 export default {
   name: "CreateStudyTimeRecord",
@@ -53,13 +53,21 @@ export default {
       startedHours: '',
       startedMinutes: '',
       endedHours: '',
-      endedMinutes: ''
+      endedMinutes: '',
+    }
+  },
+  props: {
+    date: {
+      type: Number,
+      require: true,
+      default: ''
     }
   },
   computed: {
-    ...mapGetters(['calendarYear', 'calendarMonth'])
+    ...mapGetters(['calendarYear', 'calendarMonth', 'monthlyStudyTime'])
   },
   methods: {
+    ...mapMutations(['deleteStudyTimeRecord', 'addStudyTimeRecord','closeShowModal','closeCreateStudyRecordModal']),
     token() {
       const meta = document.querySelector('meta[name="csrf-token"]')
       return meta ? meta.getAttribute('content') : ''
@@ -69,15 +77,25 @@ export default {
           `/api/study_time_records`,
           {
             method: 'POST',
+            body: JSON.stringify({
+              started_at: this.startedAt,
+              ended_at: this.endedAt
+            }),
             headers: {
+              'Content-Type': 'application/json',
               'X-Requested-With': 'XMLHttpRequest',
               'X-CSRF-Token': this.token()
             },
             credentials: 'same-origin'
           }
       )
-          .then(() => {
-            document.location.reload()
+          .then((response) => {
+            return response.json()
+          })
+          .then((json) => {
+            this.closeShowModal()
+            this.closeCreateStudyRecordModal()
+            this.addStudyTimeRecord({ studyTimeRecord: json })
           })
           .catch((error) => {
             console.warn(error)
@@ -90,9 +108,20 @@ export default {
       }
       return options
     },
-    debug() {
-      console.log(`開始時間：${this.startedHours}：${this.startedMinutes}`)
-      console.log(`終了時間：${this.endedHours}：${this.endedMinutes}`)
+    newStudyTimeRecord() {
+      const formatStartedHours = this.formatHours(this.startedHours)
+      const formatStartedMinutes = this.formatMinutes(this.startedMinutes)
+      const formatEndedHours = this.formatHours(this.endedHours)
+      const formatEndedMinutes = this.formatMinutes(this.endedMinutes)
+      this.startedAt = new Date(this.calendarYear, this.calendarMonth -1, this.date, formatStartedHours, formatStartedMinutes)
+      this.endedAt = new Date(this.calendarYear, this.calendarMonth -1, this.date, formatEndedHours, formatEndedMinutes)
+      this.fetchDailyStudyTimeRecords()
+    },
+    formatHours(hours) {
+      return hours.toString().padStart(2, '0')
+    },
+    formatMinutes(minutes) {
+      return minutes.toString().padStart(2, '0')
     }
   }
 }
