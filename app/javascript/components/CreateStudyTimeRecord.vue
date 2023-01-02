@@ -4,13 +4,13 @@
       <div class="text-center w-1/3">開始時間</div>
       <div class="w-2/3">
         <span class="border p-1">
-          <select v-model="startedHours" class="bg-base-200 w-28 text-center">
+          <select v-model="startedHours" id="startedHours" class="bg-base-200 w-28 text-center">
             <option v-for="(text,value) in timeBox(24)" :value="value" :v-text="text">
               {{ text }}
             </option>
           </select>
           <span>：</span>
-          <select v-model="startedMinutes" class="bg-base-200 w-28 text-center">
+          <select v-model="startedMinutes" id="startedMinutes" class="bg-base-200 w-28 text-center">
             <option v-for="(text,value) in timeBox(60)" :value="value" :v-text="text">
               {{ text }}
             </option>
@@ -22,13 +22,13 @@
       <div class="text-center w-1/3">終了時間</div>
       <div class="w-2/3">
         <span class="border p-1">
-          <select v-model="endedHours" class="bg-base-200 w-28 text-center">
+          <select v-model="endedHours" id="endedHours" class="bg-base-200 w-28 text-center">
             <option v-for="(text,value) in timeBox(24)" :value="value" :v-text="text">
               {{ text }}
             </option>
           </select>
           <span>：</span>
-          <select v-model="endedMinutes" class="bg-base-200 w-28 text-center">
+          <select v-model="endedMinutes" id="endedMinutes" class="bg-base-200 w-28 text-center">
             <option v-for="(text,value) in timeBox(60)" :value="value" :v-text="text">
               {{ text }}
             </option>
