@@ -20,7 +20,7 @@ module Api
 
     def show
       year = params[:year]
-      month = params[:month]
+      month = format('%02d', params[:month])
       @study_time_records = if month.nil?
                               StudyTimeRecord.annual_study_records(current_user, year)
                             else

@@ -106,7 +106,7 @@ export default {
         const dailyStudyTime = this.monthlyStudyTime.filter(
           (studyTimeRecord) => {
             return studyTimeRecord.started_at.includes(
-              `${this.calendarYear}-${this.calendarMonth}-${this.formatDay(
+              `${this.calendarYear}-${this.formatMonth(this.calendarMonth)}-${this.formatDay(
                 date
               )}`
             )
