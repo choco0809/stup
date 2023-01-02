@@ -75,7 +75,5 @@ RSpec.describe 'Modal', type: :system do
     end
 
     it '学習記録を編集できること'
-
   end
-
 end
