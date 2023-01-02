@@ -5,11 +5,12 @@
       <div class="w-2/3">
         <span class="border p-1">
           <select
-            v-model="startedHours"
             id="startedHours"
+            v-model="startedHours"
             class="bg-base-200 w-28 text-center">
             <option
               v-for="(text, value) in timeBox(24)"
+              :key="text"
               :value="value"
               :v-text="text">
               {{ text }}
@@ -17,11 +18,12 @@
           </select>
           <span>：</span>
           <select
-            v-model="startedMinutes"
             id="startedMinutes"
+            v-model="startedMinutes"
             class="bg-base-200 w-28 text-center">
             <option
               v-for="(text, value) in timeBox(60)"
+              :key="value"
               :value="value"
               :v-text="text">
               {{ text }}
@@ -35,11 +37,12 @@
       <div class="w-2/3">
         <span class="border p-1">
           <select
-            v-model="endedHours"
             id="endedHours"
+            v-model="endedHours"
             class="bg-base-200 w-28 text-center">
             <option
               v-for="(text, value) in timeBox(24)"
+              :key="value"
               :value="value"
               :v-text="text">
               {{ text }}
@@ -47,11 +50,12 @@
           </select>
           <span>：</span>
           <select
-            v-model="endedMinutes"
             id="endedMinutes"
+            v-model="endedMinutes"
             class="bg-base-200 w-28 text-center">
             <option
               v-for="(text, value) in timeBox(60)"
+              :key="value"
               :value="value"
               :v-text="text">
               {{ text }}
@@ -71,19 +75,19 @@ import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'CreateStudyTimeRecord',
+  props: {
+    date: {
+      type: Number,
+      require: true,
+      default: 0
+    }
+  },
   data() {
     return {
       startedHours: '',
       startedMinutes: '',
       endedHours: '',
       endedMinutes: ''
-    }
-  },
-  props: {
-    date: {
-      type: Number,
-      require: true,
-      default: ''
     }
   },
   computed: {
@@ -127,7 +131,7 @@ export default {
         })
     },
     timeBox(limitValue) {
-      let options = {}
+      const options = {}
       for (let i = 0; i < limitValue; i++) {
         options[i] = i.toString().padStart(2, '0')
       }

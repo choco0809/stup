@@ -69,8 +69,8 @@
             </table>
           </div>
           <div
-            class="text-center"
-            v-if="finishedStudyTime(dailyStudyTimeRecords)">
+            v-if="finishedStudyTime(dailyStudyTimeRecords)"
+            class="text-center">
             <button class="btn btn-warning" @click="openCreateModal()">
               新規作成
             </button>
