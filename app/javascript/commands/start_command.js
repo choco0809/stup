@@ -9,7 +9,7 @@ function startCommand(client) {
         method: 'POST',
         body: JSON.stringify({
           uid: interaction.user.id,
-          started_at: new Date()
+          started_at: truncateSeconds(new Date())
         }),
         headers: {
           'Content-Type': 'application/json'
@@ -26,6 +26,15 @@ function startCommand(client) {
         })
     }
   })
+}
+
+function truncateSeconds(date) {
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+  const hours = date.getHours()
+  const minutes = date.getMinutes()
+  return new Date(`${year}/${month}/${day} ${hours}:${minutes}`)
 }
 
 module.exports = startCommand

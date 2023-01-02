@@ -37,21 +37,11 @@
               <div v-if="futureDate(date.date)">▲</div>
               <div v-else-if="studyTimesLength(date.dailyStudyTime)">
                 <button @click="openModal(date)">ー</button>
-                <StudyTimeRecordsModal
-                  v-show="showModal"
-                  :date="modalDate"
-                  :daily-study-time-records="modalItems"
-                  @close="closeModal"></StudyTimeRecordsModal>
               </div>
               <div v-else>
                 <button @click="openModal(date)">
                   {{ totalStudyTimes(date.dailyStudyTime) }}分
                 </button>
-                <StudyTimeRecordsModal
-                  v-show="showModal"
-                  :date="modalDate"
-                  :daily-study-time-records="modalItems"
-                  @close="closeModal"></StudyTimeRecordsModal>
               </div>
             </div>
           </div>
@@ -59,6 +49,11 @@
       </tr>
     </tbody>
   </table>
+  <StudyTimeRecordsModal
+    v-show="showModal"
+    :date="modalDate"
+    :daily-study-time-records="modalItems"
+    @close="closeModal"></StudyTimeRecordsModal>
 </template>
 
 <script>
@@ -70,13 +65,17 @@ export default {
   components: { StudyTimeRecordsModal },
   data() {
     return {
-      showModal: false,
       modalDate: '',
       modalItems: []
     }
   },
   computed: {
-    ...mapGetters(['calendarYear', 'calendarMonth', 'monthlyStudyTime']),
+    ...mapGetters([
+      'calendarYear',
+      'calendarMonth',
+      'monthlyStudyTime',
+      'showModal'
+    ]),
     calendarWeeks() {
       const weekArry = []
       let value = []
@@ -136,7 +135,10 @@ export default {
     ...mapMutations([
       'updateCalendarYear',
       'updateCalendarMonth',
-      'updateMonthlyStudyTime'
+      'updateMonthlyStudyTime',
+      'openShowModal',
+      'closeShowModal',
+      'closeCreateStudyRecordModal'
     ]),
     ...mapActions([
       'setCurrentYearAndCalendarYear',
@@ -254,12 +256,13 @@ export default {
       return year + month + day
     },
     openModal(date) {
-      this.showModal = true
       this.modalDate = date.date
       this.modalItems = date.dailyStudyTime
+      this.openShowModal()
     },
     closeModal() {
-      this.showModal = false
+      this.closeShowModal()
+      this.closeCreateStudyRecordModal()
     }
   }
 }
