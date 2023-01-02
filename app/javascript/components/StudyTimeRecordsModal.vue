@@ -38,17 +38,17 @@
               <tbody
                   v-for="studyTimeRecords in dailyStudyTimeRecords"
                   :key="studyTimeRecords.id">
-              <tr>
-                <td class="border border-black text-center">
-                  {{ formatStartAndEndAt(studyTimeRecords.started_at) }}
+              <tr class="modal-thread-list-item">
+                <td class="modal-thread-list-contents border border-black text-center">
+                    {{ formatStartAndEndAt(studyTimeRecords.started_at) }}
                 </td>
-                <td class="border border-black text-center">
+                <td class="modal-thread-list-contents border border-black text-center">
                   {{ formatStartAndEndAt(studyTimeRecords.ended_at) }}
                 </td>
-                <td v-if="calculateStudyTime(studyTimeRecords) !== null" class="border border-black text-center">
-                  {{ calculateStudyTime(studyTimeRecords) }} 分
+                <td v-if="calculateStudyTime(studyTimeRecords) !== null" class="modal-thread-list-contents border border-black text-center">
+                  {{ calculateStudyTime(studyTimeRecords) }}分
                 </td>
-                <td v-else class="border border-black text-center"></td>
+                <td v-else class=" border border-black text-center"></td>
                 <td class="border border-black text-center">
                 </td>
                 <td class="text-center">
