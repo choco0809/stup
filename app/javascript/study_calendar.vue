@@ -50,10 +50,10 @@
     </tbody>
   </table>
   <StudyTimeRecordsModal
-      v-show="showModal"
-      :date="modalDate"
-      :daily-study-time-records="modalItems"
-      @close="closeModal"></StudyTimeRecordsModal>
+    v-show="showModal"
+    :date="modalDate"
+    :daily-study-time-records="modalItems"
+    @close="closeModal"></StudyTimeRecordsModal>
 </template>
 
 <script>
@@ -70,7 +70,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['calendarYear', 'calendarMonth', 'monthlyStudyTime', 'showModal']),
+    ...mapGetters([
+      'calendarYear',
+      'calendarMonth',
+      'monthlyStudyTime',
+      'showModal'
+    ]),
     calendarWeeks() {
       const weekArry = []
       let value = []

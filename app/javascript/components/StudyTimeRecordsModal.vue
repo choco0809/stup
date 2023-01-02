@@ -10,16 +10,16 @@
           <div class="text-center basis-1/6">
             <button @click="$emit('close')">
               <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor">
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor">
                 <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12" />
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
@@ -28,46 +28,56 @@
           <div class="h-60 overflow-y-auto">
             <table class="w-full table-fixed">
               <thead>
-              <tr class="bg-base-200">
-                <th class="border border-black">開始時間</th>
-                <th class="border border-black">終了時間</th>
-                <th class="border border-black">学習時間</th>
-                <th class="border border-black w-2/5">memo</th>
-              </tr>
+                <tr class="bg-base-200">
+                  <th class="border border-black">開始時間</th>
+                  <th class="border border-black">終了時間</th>
+                  <th class="border border-black">学習時間</th>
+                  <th class="border border-black w-2/5">memo</th>
+                </tr>
               </thead>
               <tbody
-                  v-for="studyTimeRecords in dailyStudyTimeRecords"
-                  :key="studyTimeRecords.id">
-              <tr class="modal-thread-list-item">
-                <td class="modal-thread-list-contents border border-black text-center">
+                v-for="studyTimeRecords in dailyStudyTimeRecords"
+                :key="studyTimeRecords.id">
+                <tr class="modal-thread-list-item">
+                  <td
+                    class="modal-thread-list-contents border border-black text-center">
                     {{ formatStartAndEndAt(studyTimeRecords.started_at) }}
-                </td>
-                <td class="modal-thread-list-contents border border-black text-center">
-                  {{ formatStartAndEndAt(studyTimeRecords.ended_at) }}
-                </td>
-                <td v-if="calculateStudyTime(studyTimeRecords) !== null" class="modal-thread-list-contents border border-black text-center">
-                  {{ calculateStudyTime(studyTimeRecords) }}分
-                </td>
-                <td v-else class=" border border-black text-center"></td>
-                <td class="border border-black text-center">
-                </td>
-                <td class="text-center">
-                  <button class="btn btn-info" @click="fetchDailyStudyTimeRecords(studyTimeRecords)">削除</button>
-                </td>
-                <td>
-                  <button class="btn btn-warning">編集</button>
-                </td>
-              </tr>
+                  </td>
+                  <td
+                    class="modal-thread-list-contents border border-black text-center">
+                    {{ formatStartAndEndAt(studyTimeRecords.ended_at) }}
+                  </td>
+                  <td
+                    v-if="calculateStudyTime(studyTimeRecords) !== null"
+                    class="modal-thread-list-contents border border-black text-center">
+                    {{ calculateStudyTime(studyTimeRecords) }}分
+                  </td>
+                  <td v-else class="border border-black text-center"></td>
+                  <td class="border border-black text-center"></td>
+                  <td class="text-center">
+                    <button
+                      class="btn btn-info"
+                      @click="fetchDailyStudyTimeRecords(studyTimeRecords)">
+                      削除
+                    </button>
+                  </td>
+                  <td>
+                    <button class="btn btn-warning">編集</button>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
-          <div class="text-center" v-if="finishedStudyTime(dailyStudyTimeRecords)">
-            <button class="btn btn-warning" @click="openCreateModal()">新規作成</button>
+          <div
+            class="text-center"
+            v-if="finishedStudyTime(dailyStudyTimeRecords)">
+            <button class="btn btn-warning" @click="openCreateModal()">
+              新規作成
+            </button>
           </div>
         </div>
         <div v-else>
-          <CreateStudyTimeRecord :date="date">
-          </CreateStudyTimeRecord>
+          <CreateStudyTimeRecord :date="date"> </CreateStudyTimeRecord>
         </div>
       </div>
     </div>
@@ -75,7 +85,7 @@
 </template>
 
 <script>
-import {mapGetters, mapMutations} from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import CreateStudyTimeRecord from './CreateStudyTimeRecord.vue'
 
 export default {
@@ -95,10 +105,19 @@ export default {
   },
   emits: ['close'],
   computed: {
-    ...mapGetters(['calendarYear', 'calendarMonth', 'monthlyStudyTime', 'createModal'])
+    ...mapGetters([
+      'calendarYear',
+      'calendarMonth',
+      'monthlyStudyTime',
+      'createModal'
+    ])
   },
   methods: {
-    ...mapMutations(['openCreateStudyRecordModal','deleteStudyTimeRecord','closeShowModal']),
+    ...mapMutations([
+      'openCreateStudyRecordModal',
+      'deleteStudyTimeRecord',
+      'closeShowModal'
+    ]),
     token() {
       const meta = document.querySelector('meta[name="csrf-token"]')
       return meta ? meta.getAttribute('content') : ''
@@ -127,33 +146,29 @@ export default {
       return Math.floor((endedAt - startedAt) / 1000 / 60)
     },
     fetchDailyStudyTimeRecords(record) {
-      fetch(
-          `/api/study_time_records/${record.id}`,
-          {
-            method: 'DELETE',
-            headers: {
-              'X-Requested-With': 'XMLHttpRequest',
-              'X-CSRF-Token': this.token()
-            },
-            credentials: 'same-origin'
-          }
-      )
-          .then((response) => {
-            return response.json()
-          })
-          .then((json) => {
-            this.deleteStudyTimeRecord({record: json})
-            this.closeShowModal()
-          })
-          .catch((error) => {
-            console.warn(error)
-          })
+      fetch(`/api/study_time_records/${record.id}`, {
+        method: 'DELETE',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRF-Token': this.token()
+        },
+        credentials: 'same-origin'
+      })
+        .then((response) => {
+          return response.json()
+        })
+        .then((json) => {
+          this.deleteStudyTimeRecord({ record: json })
+          this.closeShowModal()
+        })
+        .catch((error) => {
+          console.warn(error)
+        })
     },
     finishedStudyTime(record) {
       if (record.length === 0) return true
       for (const elem of record) {
-        if (elem.ended_at === null)
-          return false
+        if (elem.ended_at === null) return false
       }
       return true
     },

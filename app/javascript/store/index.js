@@ -31,13 +31,12 @@ export default createStore({
       state.monthlyStudyTime = payload.monthlyStudyTime
     },
     deleteStudyTimeRecord(state, payload) {
-      const result = state.monthlyStudyTime.filter(function(item) {
+      const result = state.monthlyStudyTime.filter(function (item) {
         return item.id !== payload.record.id
       })
       state.monthlyStudyTime = result
-
     },
-    addStudyTimeRecord(state, payload){
+    addStudyTimeRecord(state, payload) {
       state.monthlyStudyTime.push(payload.studyTimeRecord)
     },
     openShowModal(state) {
