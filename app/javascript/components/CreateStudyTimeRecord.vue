@@ -3,65 +3,21 @@
     <div class="flex justify-center p-2">
       <div class="text-center w-1/3">開始時間</div>
       <div class="w-2/3">
-        <span class="border p-1">
-          <select
-            id="startedHours"
-            v-model="startedHours"
-            class="bg-base-200 w-28 text-center">
-            <option
-              v-for="(text, value) in timeBox(24)"
-              :key="text"
-              :value="value"
-              :v-text="text">
-              {{ text }}
-            </option>
-          </select>
-          <span>：</span>
-          <select
-            id="startedMinutes"
-            v-model="startedMinutes"
-            class="bg-base-200 w-28 text-center">
-            <option
-              v-for="(text, value) in timeBox(60)"
-              :key="value"
-              :value="value"
-              :v-text="text">
-              {{ text }}
-            </option>
-          </select>
-        </span>
+        <VueTimepicker
+            v-model="this.startedObjectTime"
+            input-class="form-control"
+            manual-input hide-dropdown
+        />
       </div>
     </div>
     <div class="flex justify-center p-2">
       <div class="text-center w-1/3">終了時間</div>
       <div class="w-2/3">
-        <span class="border p-1">
-          <select
-            id="endedHours"
-            v-model="endedHours"
-            class="bg-base-200 w-28 text-center">
-            <option
-              v-for="(text, value) in timeBox(24)"
-              :key="value"
-              :value="value"
-              :v-text="text">
-              {{ text }}
-            </option>
-          </select>
-          <span>：</span>
-          <select
-            id="endedMinutes"
-            v-model="endedMinutes"
-            class="bg-base-200 w-28 text-center">
-            <option
-              v-for="(text, value) in timeBox(60)"
-              :key="value"
-              :value="value"
-              :v-text="text">
-              {{ text }}
-            </option>
-          </select>
-        </span>
+        <VueTimepicker
+            v-model="this.endedObjectTime"
+            input-class="form-control"
+            manual-input hide-dropdown
+        />
       </div>
     </div>
     <div class="p-5">
@@ -72,6 +28,7 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
+import VueTimepicker from 'vue3-timepicker/src/VueTimepicker.vue'
 
 export default {
   name: 'CreateStudyTimeRecord',
@@ -84,11 +41,20 @@ export default {
   },
   data() {
     return {
-      startedHours: '',
-      startedMinutes: '',
-      endedHours: '',
-      endedMinutes: ''
+      startedAt: '',
+      endedAt: '',
+      startedObjectTime: {
+        HH: '00',
+        mm: '00'
+      },
+      endedObjectTime: {
+        HH: '00',
+        mm: '00'
+      }
     }
+  },
+  components:{
+    VueTimepicker
   },
   computed: {
     ...mapGetters(['calendarYear', 'calendarMonth', 'monthlyStudyTime'])
@@ -130,31 +96,20 @@ export default {
           console.warn(error)
         })
     },
-    timeBox(limitValue) {
-      const options = {}
-      for (let i = 0; i < limitValue; i++) {
-        options[i] = i.toString().padStart(2, '0')
-      }
-      return options
-    },
     newStudyTimeRecord() {
-      const formatStartedHours = this.formatHours(this.startedHours)
-      const formatStartedMinutes = this.formatMinutes(this.startedMinutes)
-      const formatEndedHours = this.formatHours(this.endedHours)
-      const formatEndedMinutes = this.formatMinutes(this.endedMinutes)
       this.startedAt = new Date(
         this.calendarYear,
         this.calendarMonth - 1,
         this.date,
-        formatStartedHours,
-        formatStartedMinutes
+        this.startedObjectTime.HH,
+        this.startedObjectTime.mm
       )
       this.endedAt = new Date(
         this.calendarYear,
         this.calendarMonth - 1,
         this.date,
-        formatEndedHours,
-        formatEndedMinutes
+        this.endedObjectTime.HH,
+        this.endedObjectTime.mm,
       )
       this.fetchDailyStudyTimeRecords()
     },
