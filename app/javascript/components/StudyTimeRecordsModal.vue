@@ -91,7 +91,7 @@ import CreateStudyTimeRecord from './CreateStudyTimeRecord.vue'
 export default {
   name: 'StudyTimeRecordsModal',
   components: {
-    CreateStudyTimeRecord,
+    CreateStudyTimeRecord
   },
   props: {
     date: {
