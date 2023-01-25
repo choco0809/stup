@@ -27,6 +27,7 @@
     <p class="text-red-500 py-2">{{ errorStartedAtMessage }}</p>
     <p class="text-red-500 py-2">{{ errorEndedAtMessage }}</p>
     <button
+      id="createNewStudyRecord"
       class="btn btn-info"
       :disabled="isAbleCreateButton"
       @click="newStudyTimeRecord()">
