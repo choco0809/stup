@@ -72,6 +72,9 @@ RSpec.describe 'Modal', type: :system do
       fill_in 'endAt', with: '20'
       find('#endAt').send_keys :tab
       fill_in 'endAt', with: '30'
+      expect(page).not_to have_content('開始時間を入力してください')
+      expect(page).not_to have_content('終了時間を入力してください')
+      expect(find('#createNewStudyRecordButton')).not_to be_disabled
       click_on '作成'
       expect(page.all('.study-time')[0]).to have_content '30分'
     end
@@ -89,8 +92,9 @@ RSpec.describe 'Modal', type: :system do
       fill_in 'endAt', with: '19'
       find('#endAt').send_keys :tab
       fill_in 'endAt', with: '00'
-      page.has_no_content?('開始時間を入力してください')
-      page.has_no_content?('終了時間を入力してください')
+      expect(page).not_to have_content('開始時間を入力してください')
+      expect(page).not_to have_content('終了時間を入力してください')
+      expect(find('#createNewStudyRecordButton')).not_to be_disabled
       click_on '作成'
       expect(page.all('.study-time')[0]).to have_content '1380分'
     end
