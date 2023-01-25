@@ -94,6 +94,28 @@ RSpec.describe 'Modal', type: :system do
       expect(page.all('.study-time')[0]).to have_content '1380分'
     end
 
-    it '学習記録を編集できること'
+    it '開始時間が不完全な場合、validateメッセージが表示され作成ボタンが押せないこと' do
+      visit root_path
+      click_on '学習を記録する'
+      visit '/?calendar=2022-12'
+      expect(page.all('.study-time')[0]).to have_content 'ー'
+      page.all('.study-time')[0].click_on 'ー'
+      click_on '新規作成'
+      fill_in 'startAt', with: '20'
+      expect(page).to have_content '開始時間を入力してください'
+      expect(find('#createNewStudyRecordButton')).to be_disabled
+    end
+
+    it '終了時間が不完全な場合、validateメッセージが表示され作成ボタンが押せないこと' do
+      visit root_path
+      click_on '学習を記録する'
+      visit '/?calendar=2022-12'
+      expect(page.all('.study-time')[0]).to have_content 'ー'
+      page.all('.study-time')[0].click_on 'ー'
+      click_on '新規作成'
+      fill_in 'endAt', with: '20'
+      expect(page).to have_content '終了時間を入力してください'
+      expect(find('#createNewStudyRecordButton')).to be_disabled
+    end
   end
 end
