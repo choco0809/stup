@@ -4,8 +4,9 @@
       <div class="text-center w-1/3">開始時間</div>
       <div class="w-2/3">
         <VueTimepicker
+          id="startAt"
           v-model="startedAtObject"
-          name="studyAt"
+          name="startAt"
           input-class="form-control"
           manual-input
           hide-dropdown />
@@ -15,8 +16,9 @@
       <div class="text-center w-1/3">終了時間</div>
       <div class="w-2/3">
         <VueTimepicker
+          id="endAt"
           v-model="endedAtObject"
-          name="studyAt"
+          name="endAt"
           input-class="form-control"
           manual-input
           hide-dropdown />
@@ -73,10 +75,10 @@ export default {
     }
 
     const { value: startedAtObject, errorMessage: errorStartedAtMessage } =
-      useField('studyAt', validateStartedAt)
+      useField('startAt', validateStartedAt)
 
     const { value: endedAtObject, errorMessage: errorEndedAtMessage } =
-      useField('studyAt', validateEndedAt)
+      useField('endAt', validateEndedAt)
 
     const isAbleCreateButton = computed(() => {
       if (validateStartedAt() === true && validateEndedAt() === true)
