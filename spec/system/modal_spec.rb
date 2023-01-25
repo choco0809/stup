@@ -22,7 +22,7 @@ RSpec.describe 'Modal', type: :system do
       )
     end
 
-    it 'モーダルウィンドウが表示されていること' do
+    it 'カレンダーに表示されている学習時間をクリックすると、モーダルウィンドウが表示されること' do
       visit root_path
       click_on '学習を記録する'
       visit '/?calendar=2022-12'
@@ -35,7 +35,7 @@ RSpec.describe 'Modal', type: :system do
       end
     end
 
-    it '学習記録を削除できること' do
+    it '削除ボタンをクリックすると対象の学習記録が削除され、モーダルウィンドウが閉じられること' do
       visit root_path
       click_on '学習を記録する'
       visit '/?calendar=2022-12'
@@ -50,7 +50,7 @@ RSpec.describe 'Modal', type: :system do
       expect(page.all('.study-time')[15]).to have_content 'ー'
     end
 
-    it '学習記録がないとき、レコードが表示されないこと' do
+    it 'ハイフンをクリックした時に表示されるモーダルウィンドウには学習記録が表示されないこと' do
       visit root_path
       click_on '学習を記録する'
       visit '/?calendar=2022-12'
@@ -59,19 +59,38 @@ RSpec.describe 'Modal', type: :system do
       expect(page).not_to have_selector('.modal-thread-list-item')
     end
 
-    it '学習記録を作成できること' do
+    it '開始時間、終了時間を入力し作成ボタンを押すと学習時間がカレンダー上に表示されること' do
       visit root_path
       click_on '学習を記録する'
       visit '/?calendar=2022-12'
       expect(page.all('.study-time')[0]).to have_content 'ー'
       page.all('.study-time')[0].click_on 'ー'
       click_on '新規作成'
-      find('#startedHours').find("option[value='0']").select_option
-      find('#startedMinutes').find("option[value='0']").select_option
-      find('#endedHours').find("option[value='0']").select_option
-      find('#endedMinutes').find("option[value='30']").select_option
+      fill_in 'startAt', with: '20'
+      find('#startAt').send_keys :tab
+      fill_in 'startAt', with: '00'
+      fill_in 'endAt', with: '20'
+      find('#endAt').send_keys :tab
+      fill_in 'endAt', with: '30'
       click_on '作成'
       expect(page.all('.study-time')[0]).to have_content '30分'
+    end
+
+    it '終了時間が開始時間より小さい場合、終了時間は翌日扱いとして登録されること' do
+      visit root_path
+      click_on '学習を記録する'
+      visit '/?calendar=2022-12'
+      expect(page.all('.study-time')[0]).to have_content 'ー'
+      page.all('.study-time')[0].click_on 'ー'
+      click_on '新規作成'
+      fill_in 'startAt', with: '20'
+      find('#startAt').send_keys :tab
+      fill_in 'startAt', with: '00'
+      fill_in 'endAt', with: '19'
+      find('#endAt').send_keys :tab
+      fill_in 'endAt', with: '00'
+      click_on '作成'
+      expect(page.all('.study-time')[0]).to have_content '1380分'
     end
 
     it '学習記録を編集できること'
