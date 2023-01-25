@@ -89,6 +89,7 @@ RSpec.describe 'Modal', type: :system do
       fill_in 'endAt', with: '19'
       find('#endAt').send_keys :tab
       fill_in 'endAt', with: '00'
+      expect(find('#createNewStudyRecordButton')).not_to be_disabled
       click_on '作成'
       expect(page.all('.study-time')[0]).to have_content '1380分'
     end
