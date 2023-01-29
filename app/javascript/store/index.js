@@ -8,6 +8,7 @@ export default createStore({
     calendarMonth: '',
     calendar: [],
     monthlyStudyTime: [],
+    dailyStudyTimeRecords: [],
     showModal: false,
     createModal: true
   },
@@ -29,6 +30,9 @@ export default createStore({
     },
     updateMonthlyStudyTime(state, payload) {
       state.monthlyStudyTime = payload.monthlyStudyTime
+    },
+    updateDailyStudyTimeRecords(state, payload) {
+      state.dailyStudyTimeRecords = payload.dailyStudyTimeRecords
     },
     deleteStudyTimeRecord(state, payload) {
       const result = state.monthlyStudyTime.filter(function (item) {
@@ -67,6 +71,9 @@ export default createStore({
     },
     createModal(state) {
       return state.createModal
+    },
+    dailyStudyTimeRecords(state) {
+      return state.dailyStudyTimeRecords
     }
   },
   actions: {
