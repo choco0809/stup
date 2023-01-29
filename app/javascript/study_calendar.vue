@@ -49,23 +49,26 @@
       </tr>
     </tbody>
   </table>
-  <StudyTimeRecordsModal
+  <StudyTimeRecordModal
     v-show="showModal"
     :date="modalDate"
-    :daily-study-time-records="modalItems"
-    @close="closeModal"></StudyTimeRecordsModal>
+    @close="closeModal"
+  >
+  </StudyTimeRecordModal>
 </template>
 
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import StudyTimeRecordsModal from './components/StudyTimeRecordsModal.vue'
+import StudyTimeRecordModal from './components/StudyTimeRecordModal.vue'
 
 export default {
   name: 'StudyCalendar',
-  components: { StudyTimeRecordsModal },
+  components: {
+    StudyTimeRecordModal,
+  },
   data() {
     return {
-      modalDate: '',
+      modalDate: 0,
       modalItems: []
     }
   },
@@ -138,7 +141,8 @@ export default {
       'updateMonthlyStudyTime',
       'openShowModal',
       'closeShowModal',
-      'closeCreateStudyRecordModal'
+      'closeCreateStudyRecordModal',
+      'updateDailyStudyTimeRecords'
     ]),
     ...mapActions([
       'setCurrentYearAndCalendarYear',
@@ -256,8 +260,8 @@ export default {
       return year + month + day
     },
     openModal(date) {
-      this.modalDate = date.date
-      this.modalItems = date.dailyStudyTime
+      this.modalDate = Number(date.date)
+      this.updateDailyStudyTimeRecords({dailyStudyTimeRecords: date.dailyStudyTime})
       this.openShowModal()
     },
     closeModal() {
