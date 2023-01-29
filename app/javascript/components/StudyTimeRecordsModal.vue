@@ -53,7 +53,9 @@
                     {{ calculateStudyTime(studyTimeRecords) }}分
                   </td>
                   <td v-else class="border border-black text-center"></td>
-                  <td class="border border-black text-center"></td>
+                  <td class="modal-thread-list-contents border border-black text-left">
+                    {{ studyTimeRecords.memo }}
+                  </td>
                   <td class="text-center">
                     <button
                       class="btn btn-info"

@@ -6,26 +6,39 @@
         <VueTimepicker
           id="startAt"
           v-model="startedAtObject"
+          class="float-left"
           name="startAt"
           input-class="form-control"
           manual-input
           hide-dropdown />
       </div>
     </div>
-    <div class="flex justify-center p-2">
+    <div class="flex justify p-2">
       <div class="text-center w-1/3">終了時間</div>
       <div class="w-2/3">
         <VueTimepicker
           id="endAt"
           v-model="endedAtObject"
+          class="float-left"
           name="endAt"
           input-class="form-control"
           manual-input
           hide-dropdown />
       </div>
     </div>
-    <p class="text-red-500 py-2">{{ errorStartedAtMessage }}</p>
-    <p class="text-red-500 py-2">{{ errorEndedAtMessage }}</p>
+    <div class="flex justify p-2">
+      <div class="text-center w-1/3">内容</div>
+      <input name="memoContent" v-model="memoContent" class="border border-base-300 w-2/3 h-9 w-96" placeholder="メモの内容">
+    </div>
+    <div v-if="errorStartedAtMessage === '開始時間を入力してください'">
+      <p class="text-red-500 py-2">{{ errorStartedAtMessage }}</p>
+    </div>
+    <div v-if="errorEndedAtMessage === '終了時間を入力してください'">
+      <p class="text-red-500 py-2">{{ errorEndedAtMessage }}</p>
+    </div>
+    <div v-if="errorMemoMessage === '20文字以内で入力してください'">
+      <p class="text-red-500 py-2">{{ errorMemoMessage }}</p>
+    </div>
     <button
       id="createNewStudyRecordButton"
       class="btn btn-info"
@@ -58,6 +71,7 @@ export default {
     const store = useStore()
     const startedAt = ref()
     const endedAt = ref()
+    const memo = ref()
 
     const validateStartedAt = () => {
       if (startedAtObject === undefined || startedAtObject.value === undefined)
@@ -75,14 +89,24 @@ export default {
       return true
     }
 
+    const validateMemo = () => {
+      if (memoContent.value === undefined) return true
+      if (memoContent.value.length > 20)
+        return '20文字以内で入力してください'
+      return true
+    }
+
     const { value: startedAtObject, errorMessage: errorStartedAtMessage } =
       useField('startAt', validateStartedAt)
 
     const { value: endedAtObject, errorMessage: errorEndedAtMessage } =
       useField('endAt', validateEndedAt)
 
+    const { value: memoContent, errorMessage: errorMemoMessage } =
+        useField('memoContent', validateMemo  )
+
     const isAbleCreateButton = computed(() => {
-      if (validateStartedAt() === true && validateEndedAt() === true)
+      if (validateStartedAt() === true && validateEndedAt() === true && validateMemo() === true)
         return false
       return true
     })
@@ -97,7 +121,8 @@ export default {
         method: 'POST',
         body: JSON.stringify({
           started_at: startedAt.value,
-          ended_at: endedAt.value
+          ended_at: endedAt.value,
+          memo: memo.value
         }),
         headers: {
           'Content-Type': 'application/json',
@@ -145,14 +170,17 @@ export default {
         endedAtObject.value.mm
       )
       endedAt.value = compareStartedAtAndEndedAt(startedAt.value, endedAt.value)
+      memo.value = memoContent.value
       fetchDailyStudyTimeRecords()
     }
 
     return {
       startedAtObject,
       endedAtObject,
+      memoContent,
       errorStartedAtMessage,
       errorEndedAtMessage,
+      errorMemoMessage,
       isAbleCreateButton,
       newStudyTimeRecord
     }

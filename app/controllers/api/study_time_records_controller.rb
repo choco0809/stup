@@ -6,7 +6,9 @@ module Api
 
     def create
       @user = User.find(current_user.id)
-      @study_time_record = @user.study_time_records.new(started_at: params[:started_at], ended_at: params[:ended_at])
+      @study_time_record = @user.study_time_records.new(started_at: params[:started_at],
+                                                        ended_at: params[:ended_at],
+                                                        memo: params[:memo])
       @study_time_record.save!
       @study_time_record
     end
