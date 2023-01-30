@@ -54,13 +54,13 @@
 <script>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
-import UseFetchMethod from './functions/UseFetchMethod.vue'
+import useStudyTimeRecordFunction from './functions/useStudyTimeRecordFunction.vue'
 
 export default {
   name: 'StudyTimeRecordList',
   setup() {
     const store = useStore()
-    const { token, formatHours, formatMinutes } = UseFetchMethod()
+    const { token, formatHours, formatMinutes } = useStudyTimeRecordFunction()
 
     const formatStartAndEndAt = (timeStamp) => {
       if (timeStamp === null) return null

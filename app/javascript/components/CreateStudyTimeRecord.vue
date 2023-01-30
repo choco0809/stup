@@ -29,8 +29,8 @@
     <div class="flex justify p-2">
       <div class="text-center w-1/3">内容</div>
       <input
-        name="memoContent"
         v-model="memoContent"
+        name="memoContent"
         class="border border-base-300 w-2/3 h-9 w-96"
         placeholder="メモの内容" />
     </div>
@@ -58,7 +58,7 @@ import { computed, ref } from 'vue'
 import VueTimepicker from 'vue3-timepicker/src/VueTimepicker.vue'
 import { useField } from 'vee-validate'
 import { useStore } from 'vuex'
-import UseFetchMethod from './functions/UseFetchMethod.vue'
+import useStudyTimeRecordFunction from './functions/useStudyTimeRecordFunction.vue'
 
 export default {
   name: 'CreateStudyTimeRecord',
@@ -73,7 +73,7 @@ export default {
     }
   },
   setup(props) {
-    const { token } = UseFetchMethod()
+    const { token } = useStudyTimeRecordFunction()
 
     const store = useStore()
     const startedAt = ref()
