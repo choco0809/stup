@@ -52,9 +52,10 @@ export default {
       default: 0
     }
   },
-  setup(props, context) {
+  emits: ['close'],
+  setup(props, { emit }) {
     const closeEmit = () => {
-      context.emit('close')
+      emit('close')
     }
     const store = useStore()
 
