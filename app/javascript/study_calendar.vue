@@ -52,9 +52,7 @@
   <StudyTimeRecordModal
     v-show="showModal"
     :date="modalDate"
-    @close="closeModal"
-  >
-  </StudyTimeRecordModal>
+    @close="closeModal"></StudyTimeRecordModal>
 </template>
 
 <script>
@@ -64,7 +62,7 @@ import StudyTimeRecordModal from './components/StudyTimeRecordModal.vue'
 export default {
   name: 'StudyCalendar',
   components: {
-    StudyTimeRecordModal,
+    StudyTimeRecordModal
   },
   data() {
     return {
@@ -261,7 +259,9 @@ export default {
     },
     openModal(date) {
       this.modalDate = Number(date.date)
-      this.updateDailyStudyTimeRecords({dailyStudyTimeRecords: date.dailyStudyTime})
+      this.updateDailyStudyTimeRecords({
+        dailyStudyTimeRecords: date.dailyStudyTime
+      })
       this.openShowModal()
     },
     closeModal() {

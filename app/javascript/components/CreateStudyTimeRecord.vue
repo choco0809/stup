@@ -28,7 +28,11 @@
     </div>
     <div class="flex justify p-2">
       <div class="text-center w-1/3">内容</div>
-      <input name="memoContent" v-model="memoContent" class="border border-base-300 w-2/3 h-9 w-96" placeholder="メモの内容">
+      <input
+        name="memoContent"
+        v-model="memoContent"
+        class="border border-base-300 w-2/3 h-9 w-96"
+        placeholder="メモの内容" />
     </div>
     <div v-if="errorStartedAtMessage === '開始時間を入力してください'">
       <p class="text-red-500 py-2">{{ errorStartedAtMessage }}</p>
@@ -54,6 +58,7 @@ import { computed, ref } from 'vue'
 import VueTimepicker from 'vue3-timepicker/src/VueTimepicker.vue'
 import { useField } from 'vee-validate'
 import { useStore } from 'vuex'
+import UseFetchMethod from './functions/UseFetchMethod.vue'
 
 export default {
   name: 'CreateStudyTimeRecord',
@@ -68,6 +73,8 @@ export default {
     }
   },
   setup(props) {
+    const { token } = UseFetchMethod()
+
     const store = useStore()
     const startedAt = ref()
     const endedAt = ref()
@@ -91,8 +98,7 @@ export default {
 
     const validateMemo = () => {
       if (memoContent.value === undefined) return true
-      if (memoContent.value.length > 20)
-        return '20文字以内で入力してください'
+      if (memoContent.value.length > 20) return '20文字以内で入力してください'
       return true
     }
 
@@ -102,19 +108,20 @@ export default {
     const { value: endedAtObject, errorMessage: errorEndedAtMessage } =
       useField('endAt', validateEndedAt)
 
-    const { value: memoContent, errorMessage: errorMemoMessage } =
-        useField('memoContent', validateMemo  )
+    const { value: memoContent, errorMessage: errorMemoMessage } = useField(
+      'memoContent',
+      validateMemo
+    )
 
     const isAbleCreateButton = computed(() => {
-      if (validateStartedAt() === true && validateEndedAt() === true && validateMemo() === true)
+      if (
+        validateStartedAt() === true &&
+        validateEndedAt() === true &&
+        validateMemo() === true
+      )
         return false
       return true
     })
-
-    const token = () => {
-      const meta = document.querySelector('meta[name="csrf-token"]')
-      return meta ? meta.getAttribute('content') : ''
-    }
 
     const fetchDailyStudyTimeRecords = () => {
       fetch(`/api/study_time_records`, {
