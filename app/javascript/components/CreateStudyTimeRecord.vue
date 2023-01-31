@@ -57,7 +57,7 @@
 import { ref } from 'vue'
 import VueTimepicker from 'vue3-timepicker/src/VueTimepicker.vue'
 import { useStore } from 'vuex'
-import useStudyTimeRecordFunction from './functions/useStudyTimeRecordFunction.vue'
+import useStudyTimeRecordFunction from './functions/UseStudyTimeRecordFunction.vue'
 import useValidateModal from './functions/UseValidateModal.vue'
 
 export default {

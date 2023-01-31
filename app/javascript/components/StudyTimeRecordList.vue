@@ -54,7 +54,7 @@
 <script>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
-import useStudyTimeRecordFunction from './functions/useStudyTimeRecordFunction.vue'
+import useStudyTimeRecordFunction from './functions/UseStudyTimeRecordFunction.vue'
 
 export default {
   name: 'StudyTimeRecordList',
