@@ -54,11 +54,11 @@
 </template>
 
 <script>
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import VueTimepicker from 'vue3-timepicker/src/VueTimepicker.vue'
-import { useField } from 'vee-validate'
 import { useStore } from 'vuex'
 import useStudyTimeRecordFunction from './functions/useStudyTimeRecordFunction.vue'
+import useValidateModal from './functions/UseValidateModal.vue'
 
 export default {
   name: 'CreateStudyTimeRecord',
@@ -74,54 +74,12 @@ export default {
   },
   setup(props) {
     const { token } = useStudyTimeRecordFunction()
+    const { errorStartedAtMessage, errorEndedAtMessage, errorMemoMessage, isAbleCreateButton, startedAtObject, endedAtObject, memoContent } = useValidateModal()
 
     const store = useStore()
     const startedAt = ref()
     const endedAt = ref()
     const memo = ref()
-
-    const validateStartedAt = () => {
-      if (startedAtObject === undefined || startedAtObject.value === undefined)
-        return false
-      if (startedAtObject.value.HH === '' || startedAtObject.value.mm === '')
-        return '開始時間を入力してください'
-      return true
-    }
-
-    const validateEndedAt = () => {
-      if (endedAtObject === undefined || endedAtObject.value === undefined)
-        return false
-      if (endedAtObject.value.HH === '' || endedAtObject.value.mm === '')
-        return '終了時間を入力してください'
-      return true
-    }
-
-    const validateMemo = () => {
-      if (memoContent.value === undefined) return true
-      if (memoContent.value.length > 20) return '20文字以内で入力してください'
-      return true
-    }
-
-    const { value: startedAtObject, errorMessage: errorStartedAtMessage } =
-      useField('startAt', validateStartedAt)
-
-    const { value: endedAtObject, errorMessage: errorEndedAtMessage } =
-      useField('endAt', validateEndedAt)
-
-    const { value: memoContent, errorMessage: errorMemoMessage } = useField(
-      'memoContent',
-      validateMemo
-    )
-
-    const isAbleCreateButton = computed(() => {
-      if (
-        validateStartedAt() === true &&
-        validateEndedAt() === true &&
-        validateMemo() === true
-      )
-        return false
-      return true
-    })
 
     const fetchDailyStudyTimeRecords = () => {
       fetch(`/api/study_time_records`, {
