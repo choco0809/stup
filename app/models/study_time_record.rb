@@ -2,6 +2,7 @@
 
 class StudyTimeRecord < ApplicationRecord
   belongs_to :user, foreign_key: :user_id
+  validates :memo, length: { maximum: 20 }
 
   class << self
     def annual_study_records(user, year)
