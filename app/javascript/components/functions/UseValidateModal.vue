@@ -1,6 +1,6 @@
 <script>
-import {useField} from 'vee-validate'
-import {computed} from 'vue'
+import { useField } from 'vee-validate'
+import { computed } from 'vue'
 
 export default function () {
   const validateStartedAt = () => {
@@ -26,20 +26,23 @@ export default function () {
   }
 
   const { value: startedAtObject, errorMessage: errorStartedAtMessage } =
-      useField('startAt', validateStartedAt)
+    useField('startAt', validateStartedAt)
 
-  const { value: endedAtObject, errorMessage: errorEndedAtMessage } =
-      useField('endAt', validateEndedAt)
+  const { value: endedAtObject, errorMessage: errorEndedAtMessage } = useField(
+    'endAt',
+    validateEndedAt
+  )
 
-  const { value: memoContent, errorMessage: errorMemoMessage } =
-      useField('memoContent', validateMemo
+  const { value: memoContent, errorMessage: errorMemoMessage } = useField(
+    'memoContent',
+    validateMemo
   )
 
   const isAbleCreateButton = computed(() => {
     if (
-        validateStartedAt() === true &&
-        validateEndedAt() === true &&
-        validateMemo() === true
+      validateStartedAt() === true &&
+      validateEndedAt() === true &&
+      validateMemo() === true
     )
       return false
     return true
@@ -52,7 +55,7 @@ export default function () {
     isAbleCreateButton,
     startedAtObject,
     endedAtObject,
-    memoContent,
+    memoContent
   }
 }
 </script>

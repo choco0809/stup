@@ -74,7 +74,15 @@ export default {
   },
   setup(props) {
     const { token } = useStudyTimeRecordFunction()
-    const { errorStartedAtMessage, errorEndedAtMessage, errorMemoMessage, isAbleCreateButton, startedAtObject, endedAtObject, memoContent } = useValidateModal()
+    const {
+      errorStartedAtMessage,
+      errorEndedAtMessage,
+      errorMemoMessage,
+      isAbleCreateButton,
+      startedAtObject,
+      endedAtObject,
+      memoContent
+    } = useValidateModal()
 
     const store = useStore()
     const startedAt = ref()
