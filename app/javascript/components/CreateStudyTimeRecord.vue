@@ -31,7 +31,7 @@
       <input
         v-model="memoContent"
         name="memoContent"
-        class="border border-base-300 w-2/3 h-9 w-96"
+        class="border border-base-300 w-2/3 h-9 w-96 pl-2.5"
         placeholder="メモの内容" />
     </div>
     <div v-if="errorStartedAtMessage === '開始時間を入力してください'">
