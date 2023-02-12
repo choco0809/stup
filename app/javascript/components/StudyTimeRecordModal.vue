@@ -23,11 +23,14 @@
           </button>
         </div>
       </div>
-      <div v-if="createModal" class="p-10">
+      <div v-if="!createModal && !editModal" class="p-10">
         <StudyTimeRecordList />
       </div>
-      <div v-else>
+      <div v-else-if="createModal">
         <CreateStudyTimeRecord :date="date"> </CreateStudyTimeRecord>
+      </div>
+      <div v-else>
+        <EditStudyTimeRecord />
       </div>
     </div>
   </div>
@@ -38,12 +41,14 @@ import { computed } from 'vue'
 import { useStore } from 'vuex'
 import CreateStudyTimeRecord from './CreateStudyTimeRecord.vue'
 import StudyTimeRecordList from './StudyTimeRecordList.vue'
+import EditStudyTimeRecord from './EditStudyTimeRecord.vue'
 
 export default {
   name: 'StudyTimeRecordModal',
   components: {
     CreateStudyTimeRecord,
-    StudyTimeRecordList
+    StudyTimeRecordList,
+    EditStudyTimeRecord
   },
   props: {
     date: {
@@ -63,6 +68,7 @@ export default {
       calendarYear: computed(() => store.getters.calendarYear),
       calendarMonth: computed(() => store.getters.calendarMonth),
       createModal: computed(() => store.getters.createModal),
+      editModal: computed( () => store.getters.editModal),
       closeEmit
     }
   }
