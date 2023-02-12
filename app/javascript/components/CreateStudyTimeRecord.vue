@@ -43,18 +43,30 @@
     <div v-if="errorMemoMessage === '20文字以内で入力してください'">
       <p class="text-red-500 py-2">{{ errorMemoMessage }}</p>
     </div>
-    <button
-      id="createNewStudyRecordButton"
-      class="btn btn-info"
-      :disabled="isAbleCreateButton"
-      @click="newStudyTimeRecord()">
-      作成
-    </button>
+    <div class="flex justify-center p-2">
+      <div class="pr-2">
+        <button
+            id="createNewStudyRecordButton"
+            class="btn btn-info"
+            :disabled="isAbleCreateButton"
+            @click="newStudyTimeRecord()">
+          作成
+        </button>
+      </div>
+      <div>
+        <button
+            class="btn btn-info"
+            @click="cancelCreateModal()"
+        >
+          キャンセル
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import VueTimepicker from 'vue3-timepicker/src/VueTimepicker.vue'
 import { useStore } from 'vuex'
 import useStudyTimeRecordFunction from './functions/UseStudyTimeRecordFunction.vue'
@@ -147,6 +159,10 @@ export default {
       fetchDailyStudyTimeRecords()
     }
 
+    const cancelCreateModal = () => {
+      store.commit('closeCreateStudyRecordModal')
+    }
+
     return {
       startedAtObject,
       endedAtObject,
@@ -155,7 +171,8 @@ export default {
       errorEndedAtMessage,
       errorMemoMessage,
       isAbleCreateButton,
-      newStudyTimeRecord
+      newStudyTimeRecord,
+      cancelCreateModal
     }
   }
 }
