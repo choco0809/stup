@@ -101,7 +101,7 @@ export default {
     const endedAt = ref()
     const memo = ref()
 
-    const fetchDailyStudyTimeRecords = () => {
+    const fetchCreateDailyStudyTimeRecords = () => {
       fetch(`/api/study_time_records`, {
         method: 'POST',
         body: JSON.stringify({
@@ -146,7 +146,7 @@ export default {
       )
       endedAt.value = compareStartedAtAndEndedAt(startedAt.value, endedAt.value)
       memo.value = memoContent.value
-      fetchDailyStudyTimeRecords()
+      fetchCreateDailyStudyTimeRecords()
     }
 
     const cancelCreateModal = () => {
