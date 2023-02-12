@@ -13,10 +13,22 @@ export default function () {
     return minutes.toString().padStart(2, '0')
   }
 
+  const createNewDate = (year, month, date, hh, mm) => {
+    return new Date(year, month - 1, date, hh, mm)
+  }
+
+  const compareStartedAtAndEndedAt = (startAt, endAt) => {
+    if (startAt - endAt < 0) return endAt
+    endAt.setDate(endAt.getDate() + 1)
+    return endAt
+  }
+
   return {
     token,
     formatHours,
-    formatMinutes
+    formatMinutes,
+    createNewDate,
+    compareStartedAtAndEndedAt
   }
 }
 </script>

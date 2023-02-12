@@ -85,7 +85,7 @@ export default {
     }
   },
   setup(props) {
-    const { token } = useStudyTimeRecordFunction()
+    const { token, createNewDate, compareStartedAtAndEndedAt } = useStudyTimeRecordFunction()
     const {
       errorStartedAtMessage,
       errorEndedAtMessage,
@@ -127,16 +127,6 @@ export default {
         .catch((error) => {
           console.warn(error)
         })
-    }
-
-    const createNewDate = (year, month, date, hh, mm) => {
-      return new Date(year, month - 1, date, hh, mm)
-    }
-
-    const compareStartedAtAndEndedAt = (startAt, endAt) => {
-      if (startAt - endAt < 0) return endAt
-      endAt.setDate(endAt.getDate() + 1)
-      return endAt
     }
 
     const newStudyTimeRecord = () => {
