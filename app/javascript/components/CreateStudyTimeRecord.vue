@@ -46,18 +46,15 @@
     <div class="flex justify-center p-2">
       <div class="pr-2">
         <button
-            id="createNewStudyRecordButton"
-            class="btn btn-info"
-            :disabled="isAbleCreateButton"
-            @click="newStudyTimeRecord()">
+          id="createNewStudyRecordButton"
+          class="btn btn-info"
+          :disabled="isAbleCreateButton"
+          @click="newStudyTimeRecord()">
           作成
         </button>
       </div>
       <div>
-        <button
-            class="btn btn-info"
-            @click="cancelCreateModal()"
-        >
+        <button class="btn btn-info" @click="cancelCreateModal()">
           キャンセル
         </button>
       </div>
@@ -66,7 +63,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import VueTimepicker from 'vue3-timepicker/src/VueTimepicker.vue'
 import { useStore } from 'vuex'
 import useStudyTimeRecordFunction from './functions/UseStudyTimeRecordFunction.vue'
@@ -85,7 +82,8 @@ export default {
     }
   },
   setup(props) {
-    const { token, createNewDate, compareStartedAtAndEndedAt } = useStudyTimeRecordFunction()
+    const { token, createNewDate, compareStartedAtAndEndedAt } =
+      useStudyTimeRecordFunction()
     const {
       errorStartedAtMessage,
       errorEndedAtMessage,

@@ -25,13 +25,15 @@ export default function () {
     return true
   }
 
-  const { value: startedAtObject = { HH:null, mm:null }, errorMessage: errorStartedAtMessage } =
-    useField('startAt', validateStartedAt)
+  const {
+    value: startedAtObject = { HH: null, mm: null },
+    errorMessage: errorStartedAtMessage
+  } = useField('startAt', validateStartedAt)
 
-  const { value: endedAtObject = { HH:null, mm:null }, errorMessage: errorEndedAtMessage } = useField(
-    'endAt',
-    validateEndedAt
-  )
+  const {
+    value: endedAtObject = { HH: null, mm: null },
+    errorMessage: errorEndedAtMessage
+  } = useField('endAt', validateEndedAt)
 
   const { value: memoContent, errorMessage: errorMemoMessage } = useField(
     'memoContent',

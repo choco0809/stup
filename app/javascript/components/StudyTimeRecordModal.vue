@@ -68,7 +68,7 @@ export default {
       calendarYear: computed(() => store.getters.calendarYear),
       calendarMonth: computed(() => store.getters.calendarMonth),
       createModal: computed(() => store.getters.createModal),
-      editModal: computed( () => store.getters.editModal),
+      editModal: computed(() => store.getters.editModal),
       closeEmit
     }
   }
