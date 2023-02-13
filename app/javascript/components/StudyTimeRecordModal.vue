@@ -30,7 +30,7 @@
         <CreateStudyTimeRecord :date="date"> </CreateStudyTimeRecord>
       </div>
       <div v-else>
-        <EditStudyTimeRecord />
+        <EditStudyTimeRecord :date="date"></EditStudyTimeRecord>
       </div>
     </div>
   </div>
