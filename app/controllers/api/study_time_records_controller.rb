@@ -3,9 +3,9 @@
 module Api
   class StudyTimeRecordsController < ActionController::API
     include SessionsHelper
+    before_action :set_user, only: %i[create destroy update]
 
     def create
-      @user = User.find(current_user.id)
       @study_time_record = @user.study_time_records.new(started_at: params[:started_at],
                                                         ended_at: params[:ended_at],
                                                         memo: params[:memo])
@@ -14,7 +14,6 @@ module Api
     end
 
     def destroy
-      @user = User.find(current_user.id)
       @study_time_record = @user.study_time_records.find(params[:id])
       @study_time_record.destroy
       @study_time_record
@@ -29,5 +28,14 @@ module Api
                               StudyTimeRecord.monthly_study_records(current_user, year, month)
                             end
     end
+
+    def update; end
+
+    private
+
+    def set_user
+      @user = User.find(current_user.id)
+    end
+
   end
 end
