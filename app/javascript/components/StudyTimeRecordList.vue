@@ -99,9 +99,29 @@ import useStudyTimeRecordFunction from './functions/UseStudyTimeRecordFunction.v
 
 export default {
   name: 'StudyTimeRecordList',
-  setup() {
+  props: {
+    date: {
+      type: Number,
+      require: true,
+      default: 0
+    }
+  },
+  setup(props) {
     const store = useStore()
-    const { token, formatHours, formatMinutes } = useStudyTimeRecordFunction()
+    const { token, formatHours, formatMinutes, formatDay, formatMonth } = useStudyTimeRecordFunction()
+
+    const dailyStudyTimeRecords = computed( () => {
+      const calendarYear = store.getters.calendarYear
+      const calendarMonth = store.getters.calendarMonth
+
+      return store.getters.monthlyStudyTime.filter(
+          (studyTimeRecord) => {
+            return studyTimeRecord.started_at.includes(
+                `${calendarYear}-${formatMonth(calendarMonth)}-${formatDay(props.date)}`
+            )
+          }
+      )
+    })
 
     const formatStartAndEndAt = (timeStamp) => {
       if (timeStamp === null) return null
@@ -164,9 +184,7 @@ export default {
     }
 
     return {
-      dailyStudyTimeRecords: computed(
-        () => store.getters.dailyStudyTimeRecords
-      ),
+      dailyStudyTimeRecords,
       formatStartAndEndAt,
       finishedStudyTime,
       openCreateModal,

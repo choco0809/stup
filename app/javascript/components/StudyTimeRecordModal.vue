@@ -24,7 +24,7 @@
         </div>
       </div>
       <div v-if="!createModal && !editModal" class="p-10">
-        <StudyTimeRecordList />
+        <StudyTimeRecordList :date="date" />
       </div>
       <div v-else-if="createModal">
         <CreateStudyTimeRecord :date="date"> </CreateStudyTimeRecord>
