@@ -13,6 +13,14 @@ export default function () {
     return minutes.toString().padStart(2, '0')
   }
 
+  const formatDay = (day) => {
+    return day.toString().padStart(2, '0')
+  }
+
+  const formatMonth = (month) => {
+    return month.toString().padStart(2, '0')
+  }
+
   const createNewDate = (year, month, date, hh, mm) => {
     return new Date(year, month - 1, date, hh, mm)
   }
@@ -27,6 +35,8 @@ export default function () {
     token,
     formatHours,
     formatMinutes,
+    formatDay,
+    formatMonth,
     createNewDate,
     compareStartedAtAndEndedAt
   }
