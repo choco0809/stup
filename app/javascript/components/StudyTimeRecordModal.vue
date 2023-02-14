@@ -27,10 +27,10 @@
         <StudyTimeRecordList :date="date" />
       </div>
       <div v-else-if="createModal">
-        <CreateStudyTimeRecord :date="date"> </CreateStudyTimeRecord>
+        <CreateStudyTimeRecord :date="date" />
       </div>
       <div v-else>
-        <EditStudyTimeRecord :date="date"></EditStudyTimeRecord>
+        <EditStudyTimeRecord :date="date" />
       </div>
     </div>
   </div>
