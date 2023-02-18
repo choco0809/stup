@@ -66,6 +66,7 @@ RSpec.describe 'Modal', type: :system do
       expect(page.all('.study-time')[0]).to have_content 'ー'
       page.all('.study-time')[0].click_on 'ー'
       click_on '新規作成'
+      expect(page).to have_selector '.vue__time-picker-input'
       fill_in 'startAt', with: '20'
       find('#startAt').send_keys :tab
       fill_in 'startAt', with: '00'
@@ -88,6 +89,7 @@ RSpec.describe 'Modal', type: :system do
       expect(page.all('.study-time')[0]).to have_content 'ー'
       page.all('.study-time')[0].click_on 'ー'
       click_on '新規作成'
+      expect(page).to have_selector '.vue__time-picker-input'
       fill_in 'startAt', with: '20'
       find('#startAt').send_keys :tab
       fill_in 'startAt', with: '00'
