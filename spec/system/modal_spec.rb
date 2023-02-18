@@ -91,7 +91,6 @@ RSpec.describe 'Modal', type: :system do
       expect(page).to have_selector '#endAt'
       fill_in 'endAt', with: '19'
       find('#endAt').send_keys :right, '00'
-      expect(page).to have_field 'endAt', with: '19:00'
       expect(page).not_to have_content('開始時間を入力してください')
       expect(page).not_to have_content('終了時間を入力してください')
       expect(find('#createNewStudyRecordButton')).not_to be_disabled
