@@ -122,5 +122,23 @@ RSpec.describe 'Modal', type: :system do
       expect(page).to have_content '終了時間を入力してください'
       expect(find('#createNewStudyRecordButton')).to be_disabled
     end
+
+    it '既存の学習記録を編集できること' do
+      visit root_path
+      click_on '学習を記録する'
+      visit '/?calendar=2022-12'
+      click_on '60分'
+      find('button[data-method="edit"]').click
+      fill_in 'startAt', with: '21'
+      find('#startAt').send_keys :tab
+      fill_in 'startAt', with: '00'
+      fill_in 'memoContent', with: '編集のテスト'
+      click_button '保存'
+      within all('.modal-thread-list-item')[0] do
+        expect(page.all('.modal-thread-list-contents')[0]).to have_content '21:00'
+        expect(page.all('.modal-thread-list-contents')[2]).to have_content '26分'
+        expect(page.all('.modal-thread-list-contents')[3]).to have_content '編集のテスト'
+      end
+    end
   end
 end
