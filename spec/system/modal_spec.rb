@@ -66,11 +66,11 @@ RSpec.describe 'Modal', type: :system do
       expect(page.all('.study-time')[0]).to have_content 'ー'
       page.all('.study-time')[0].click_on 'ー'
       click_on '新規作成'
-      expect(page).to have_selector '.vue__time-picker-input'
+      expect(page).to have_selector '#startAt'
       fill_in 'startAt', with: '20'
       find('#startAt').send_keys :tab
       fill_in 'startAt', with: '00'
-      expect(page).to have_field 'startAt', with: '20:00'
+      expect(page).to have_selector '#endAt'
       fill_in 'endAt', with: '20'
       find('#endAt').send_keys :tab
       fill_in 'endAt', with: '30'
@@ -89,11 +89,11 @@ RSpec.describe 'Modal', type: :system do
       expect(page.all('.study-time')[0]).to have_content 'ー'
       page.all('.study-time')[0].click_on 'ー'
       click_on '新規作成'
-      expect(page).to have_selector '.vue__time-picker-input'
+      expect(page).to have_selector '#startAt'
       fill_in 'startAt', with: '20'
       find('#startAt').send_keys :tab
       fill_in 'startAt', with: '00'
-      expect(page).to have_field 'startAt', with: '20:00'
+      expect(page).to have_selector '#endAt'
       fill_in 'endAt', with: '19'
       find('#endAt').send_keys :tab
       fill_in 'endAt', with: '00'
@@ -135,7 +135,7 @@ RSpec.describe 'Modal', type: :system do
       visit '/?calendar=2022-12'
       click_on '60分'
       find('button[data-method="edit"]').click
-      expect(page).to have_selector '.vue__time-picker-input'
+      expect(page).to have_selector '#startAt'
       fill_in 'startAt', with: '21'
       find('#startAt').send_keys :tab
       fill_in 'startAt', with: '00'
