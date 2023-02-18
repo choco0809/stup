@@ -20,18 +20,21 @@ export default function () {
   }
 
   const validateMemo = () => {
-    if (memoContent.value === undefined) return true
+    if (memoContent.value === undefined || memoContent.value === null)
+      return true
     if (memoContent.value.length > 20) return '20文字以内で入力してください'
     return true
   }
 
-  const { value: startedAtObject, errorMessage: errorStartedAtMessage } =
-    useField('startAt', validateStartedAt)
+  const {
+    value: startedAtObject = { HH: null, mm: null },
+    errorMessage: errorStartedAtMessage
+  } = useField('startAt', validateStartedAt)
 
-  const { value: endedAtObject, errorMessage: errorEndedAtMessage } = useField(
-    'endAt',
-    validateEndedAt
-  )
+  const {
+    value: endedAtObject = { HH: null, mm: null },
+    errorMessage: errorEndedAtMessage
+  } = useField('endAt', validateEndedAt)
 
   const { value: memoContent, errorMessage: errorMemoMessage } = useField(
     'memoContent',

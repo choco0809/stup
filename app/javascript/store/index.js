@@ -9,8 +9,15 @@ export default createStore({
     calendar: [],
     monthlyStudyTime: [],
     dailyStudyTimeRecords: [],
+    editStudyTimeRecord: {
+      id: null,
+      startedAt: null,
+      endedAt: null,
+      memo: null
+    },
     showModal: false,
-    createModal: true
+    createModal: false,
+    editModal: false
   },
   mutations: {
     updateCurrentYear(state) {
@@ -50,10 +57,19 @@ export default createStore({
       state.showModal = false
     },
     openCreateStudyRecordModal(state) {
-      state.createModal = false
+      state.createModal = true
     },
     closeCreateStudyRecordModal(state) {
-      state.createModal = true
+      state.createModal = false
+    },
+    openEditStudyRecordModal(state) {
+      state.editModal = true
+    },
+    closeEditStudyRecordModal(state) {
+      state.editModal = false
+    },
+    updateEditStudyTimeRecord(state, payload) {
+      state.editStudyTimeRecord = payload
     }
   },
   getters: {
@@ -72,8 +88,14 @@ export default createStore({
     createModal(state) {
       return state.createModal
     },
+    editModal(state) {
+      return state.editModal
+    },
     dailyStudyTimeRecords(state) {
       return state.dailyStudyTimeRecords
+    },
+    editStudyTimeRecord(state) {
+      return state.editStudyTimeRecord
     }
   },
   actions: {

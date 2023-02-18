@@ -45,7 +45,7 @@ RSpec.describe 'Modal', type: :system do
         expect(page.all('.modal-thread-list-contents')[0]).to have_content '20:26'
         expect(page.all('.modal-thread-list-contents')[1]).to have_content '21:26'
         expect(page.all('.modal-thread-list-contents')[2]).to have_content '60分'
-        click_on '削除'
+        find('button[data-method="delete"]').click
       end
       expect(page.all('.study-time')[15]).to have_content 'ー'
     end
@@ -66,12 +66,11 @@ RSpec.describe 'Modal', type: :system do
       expect(page.all('.study-time')[0]).to have_content 'ー'
       page.all('.study-time')[0].click_on 'ー'
       click_on '新規作成'
+      expect(page).to have_selector '#startAt'
       fill_in 'startAt', with: '20'
-      find('#startAt').send_keys :tab
-      fill_in 'startAt', with: '00'
+      find('#startAt').send_keys :right, '00'
       fill_in 'endAt', with: '20'
-      find('#endAt').send_keys :tab
-      fill_in 'endAt', with: '30'
+      find('#endAt').send_keys :right, '30'
       expect(page).not_to have_content('開始時間を入力してください')
       expect(page).not_to have_content('終了時間を入力してください')
       expect(find('#createNewStudyRecordButton')).not_to be_disabled
@@ -86,12 +85,12 @@ RSpec.describe 'Modal', type: :system do
       expect(page.all('.study-time')[0]).to have_content 'ー'
       page.all('.study-time')[0].click_on 'ー'
       click_on '新規作成'
+      expect(page).to have_selector '#startAt'
       fill_in 'startAt', with: '20'
-      find('#startAt').send_keys :tab
-      fill_in 'startAt', with: '00'
+      find('#startAt').send_keys :right, '00'
+      expect(page).to have_selector '#endAt'
       fill_in 'endAt', with: '19'
-      find('#endAt').send_keys :tab
-      fill_in 'endAt', with: '00'
+      find('#endAt').send_keys :right, '00'
       expect(page).not_to have_content('開始時間を入力してください')
       expect(page).not_to have_content('終了時間を入力してください')
       expect(find('#createNewStudyRecordButton')).not_to be_disabled
@@ -121,6 +120,24 @@ RSpec.describe 'Modal', type: :system do
       fill_in 'endAt', with: '20'
       expect(page).to have_content '終了時間を入力してください'
       expect(find('#createNewStudyRecordButton')).to be_disabled
+    end
+
+    it '既存の学習記録を編集できること' do
+      visit root_path
+      click_on '学習を記録する'
+      visit '/?calendar=2022-12'
+      click_on '60分'
+      find('button[data-method="edit"]').click
+      expect(page).to have_selector '#startAt'
+      fill_in 'startAt', with: '21'
+      find('#startAt').send_keys :right, '00'
+      fill_in 'memoContent', with: '編集のテスト'
+      click_button '保存'
+      within all('.modal-thread-list-item')[0] do
+        expect(page.all('.modal-thread-list-contents')[0]).to have_content '21:00'
+        expect(page.all('.modal-thread-list-contents')[2]).to have_content '26分'
+        expect(page.all('.modal-thread-list-contents')[3]).to have_content '編集のテスト'
+      end
     end
   end
 end

@@ -46,15 +46,15 @@
     <div class="flex justify-center p-2">
       <div class="pr-2">
         <button
-          id="createNewStudyRecordButton"
+          id="editStudyRecordButton"
           class="btn btn-info"
           :disabled="isAbleCreateButton"
-          @click="newStudyTimeRecord()">
-          作成
+          @click="editStudyTimeRecord()">
+          保存
         </button>
       </div>
       <div>
-        <button class="btn btn-info" @click="cancelCreateModal()">
+        <button class="btn btn-info" @click="cancelEditModal()">
           キャンセル
         </button>
       </div>
@@ -63,14 +63,14 @@
 </template>
 
 <script>
-import { ref } from 'vue'
 import VueTimepicker from 'vue3-timepicker/src/VueTimepicker.vue'
-import { useStore } from 'vuex'
-import useStudyTimeRecordFunction from './functions/UseStudyTimeRecordFunction.vue'
 import useValidateModal from './functions/UseValidateModal.vue'
+import useStudyTimeRecordFunction from './functions/UseStudyTimeRecordFunction.vue'
+import { useStore } from 'vuex'
+import { ref, onMounted } from 'vue'
 
 export default {
-  name: 'CreateStudyTimeRecord',
+  name: 'EditStudyTimeRecord',
   components: {
     VueTimepicker
   },
@@ -82,26 +82,39 @@ export default {
     }
   },
   setup(props) {
-    const { token, createNewDate, compareStartedAtAndEndedAt } =
-      useStudyTimeRecordFunction()
     const {
+      startedAtObject,
+      endedAtObject,
+      memoContent,
       errorStartedAtMessage,
       errorEndedAtMessage,
       errorMemoMessage,
-      isAbleCreateButton,
-      startedAtObject,
-      endedAtObject,
-      memoContent
+      isAbleCreateButton
     } = useValidateModal()
 
+    const { token, createNewDate, compareStartedAtAndEndedAt } =
+      useStudyTimeRecordFunction()
     const store = useStore()
+    const recordId = ref()
     const startedAt = ref()
     const endedAt = ref()
     const memo = ref()
 
-    const fetchCreateDailyStudyTimeRecords = () => {
-      fetch(`/api/study_time_records`, {
-        method: 'POST',
+    const cancelEditModal = () => {
+      store.commit('closeEditStudyRecordModal')
+    }
+
+    const convertHoursToString = (date) => {
+      return new Date(date).getHours().toString().padStart(2, '0')
+    }
+
+    const convertMinutesToString = (date) => {
+      return new Date(date).getMinutes().toString().padStart(2, '0')
+    }
+
+    const fetchEditStudyTimeRecord = () => {
+      fetch(`/api/study_time_records/${recordId.value}`, {
+        method: 'PUT',
         body: JSON.stringify({
           started_at: startedAt.value,
           ended_at: endedAt.value,
@@ -118,16 +131,22 @@ export default {
           return response.json()
         })
         .then((json) => {
-          store.commit('closeShowModal')
-          store.commit('closeCreateStudyRecordModal')
-          store.commit('addStudyTimeRecord', { studyTimeRecord: json })
+          const monthlyStudyTime = store.getters.monthlyStudyTime
+          const updateElementNo = monthlyStudyTime.findIndex(
+            ({ id }) => id === recordId.value
+          )
+          monthlyStudyTime[updateElementNo] = json
+          store.commit('updateMonthlyStudyTime', {
+            monthlyStudyTime
+          })
+          store.commit('closeEditStudyRecordModal')
         })
         .catch((error) => {
           console.warn(error)
         })
     }
 
-    const newStudyTimeRecord = () => {
+    const editStudyTimeRecord = () => {
       startedAt.value = createNewDate(
         store.state.calendarYear,
         store.state.calendarMonth,
@@ -144,12 +163,24 @@ export default {
       )
       endedAt.value = compareStartedAtAndEndedAt(startedAt.value, endedAt.value)
       memo.value = memoContent.value
-      fetchCreateDailyStudyTimeRecords()
+      fetchEditStudyTimeRecord()
     }
 
-    const cancelCreateModal = () => {
-      store.commit('closeCreateStudyRecordModal')
-    }
+    onMounted(() => {
+      recordId.value = store.getters.editStudyTimeRecord.id
+      const editStartedAt = store.getters.editStudyTimeRecord.startedAt
+      const editEndedAt = store.getters.editStudyTimeRecord.endedAt
+      const editMemo = store.getters.editStudyTimeRecord.memo
+      startedAtObject.value = {
+        HH: convertHoursToString(editStartedAt),
+        mm: convertMinutesToString(editStartedAt)
+      }
+      endedAtObject.value = {
+        HH: convertHoursToString(editEndedAt),
+        mm: convertMinutesToString(editEndedAt)
+      }
+      memoContent.value = editMemo
+    })
 
     return {
       startedAtObject,
@@ -159,8 +190,8 @@ export default {
       errorEndedAtMessage,
       errorMemoMessage,
       isAbleCreateButton,
-      newStudyTimeRecord,
-      cancelCreateModal
+      cancelEditModal,
+      editStudyTimeRecord
     }
   }
 }

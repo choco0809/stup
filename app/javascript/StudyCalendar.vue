@@ -140,6 +140,7 @@ export default {
       'openShowModal',
       'closeShowModal',
       'closeCreateStudyRecordModal',
+      'closeEditStudyRecordModal',
       'updateDailyStudyTimeRecords'
     ]),
     ...mapActions([
@@ -267,6 +268,7 @@ export default {
     closeModal() {
       this.closeShowModal()
       this.closeCreateStudyRecordModal()
+      this.closeEditStudyRecordModal()
     }
   }
 }
