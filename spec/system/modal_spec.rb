@@ -45,7 +45,7 @@ RSpec.describe 'Modal', type: :system do
         expect(page.all('.modal-thread-list-contents')[0]).to have_content '20:26'
         expect(page.all('.modal-thread-list-contents')[1]).to have_content '21:26'
         expect(page.all('.modal-thread-list-contents')[2]).to have_content '60分'
-        click_on '削除'
+        find('button[data-method="delete"]').click
       end
       expect(page.all('.study-time')[15]).to have_content 'ー'
     end
