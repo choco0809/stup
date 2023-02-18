@@ -67,13 +67,13 @@ RSpec.describe 'Modal', type: :system do
       page.all('.study-time')[0].click_on 'ー'
       click_on '新規作成'
       fill_in 'startAt', with: '20'
-      expect(page.all('.modal-thread-list-contents')[0]).to have_content ''
       find('#startAt').send_keys :tab
       fill_in 'startAt', with: '00'
+      expect(page).to have_field 'startAt', with: '20:00'
       fill_in 'endAt', with: '20'
-      expect(page.all('.modal-thread-list-contents')[1]).to have_content ''
       find('#endAt').send_keys :tab
       fill_in 'endAt', with: '30'
+      expect(page).to have_field 'endAt', with: '20:30'
       expect(page).not_to have_content('開始時間を入力してください')
       expect(page).not_to have_content('終了時間を入力してください')
       expect(find('#createNewStudyRecordButton')).not_to be_disabled
@@ -89,13 +89,13 @@ RSpec.describe 'Modal', type: :system do
       page.all('.study-time')[0].click_on 'ー'
       click_on '新規作成'
       fill_in 'startAt', with: '20'
-      expect(page.all('.modal-thread-list-contents')[0]).to have_content ''
       find('#startAt').send_keys :tab
       fill_in 'startAt', with: '00'
+      expect(page).to have_field 'startAt', with: '20:00'
       fill_in 'endAt', with: '19'
-      expect(page.all('.modal-thread-list-contents')[1]).to have_content ''
       find('#endAt').send_keys :tab
       fill_in 'endAt', with: '00'
+      expect(page).to have_field 'endAt', with: '19:00'
       expect(page).not_to have_content('開始時間を入力してください')
       expect(page).not_to have_content('終了時間を入力してください')
       expect(find('#createNewStudyRecordButton')).not_to be_disabled
@@ -133,10 +133,11 @@ RSpec.describe 'Modal', type: :system do
       visit '/?calendar=2022-12'
       click_on '60分'
       find('button[data-method="edit"]').click
+      expect(page).to have_selector '.vue__time-picker-input'
       fill_in 'startAt', with: '21'
-      expect(page.all('.modal-thread-list-contents')[0]).to have_content ''
       find('#startAt').send_keys :tab
       fill_in 'startAt', with: '00'
+      expect(page).to have_field 'startAt', with: '21:00'
       fill_in 'memoContent', with: '編集のテスト'
       click_button '保存'
       within all('.modal-thread-list-item')[0] do
