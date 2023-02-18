@@ -34,8 +34,7 @@
           <td class="text-center">
             <button
               data-method="delete"
-              @click="fetchDailyStudyTimeRecords(studyTimeRecords)"
-            >
+              @click="fetchDailyStudyTimeRecords(studyTimeRecords)">
               <svg
                 class="inline-block"
                 type="button"
@@ -61,10 +60,7 @@
             </button>
           </td>
           <td class="text-center">
-            <button
-              data-method="edit"
-              @click="openEditModal(studyTimeRecords)"
-            >
+            <button data-method="edit" @click="openEditModal(studyTimeRecords)">
               <svg
                 class="inline-block"
                 type="button"
@@ -113,19 +109,20 @@ export default {
   },
   setup(props) {
     const store = useStore()
-    const { token, formatHours, formatMinutes, formatDay, formatMonth } = useStudyTimeRecordFunction()
+    const { token, formatHours, formatMinutes, formatDay, formatMonth } =
+      useStudyTimeRecordFunction()
 
-    const dailyStudyTimeRecords = computed( () => {
+    const dailyStudyTimeRecords = computed(() => {
       const calendarYear = store.getters.calendarYear
       const calendarMonth = store.getters.calendarMonth
 
-      return store.getters.monthlyStudyTime.filter(
-          (studyTimeRecord) => {
-            return studyTimeRecord.started_at.includes(
-                `${calendarYear}-${formatMonth(calendarMonth)}-${formatDay(props.date)}`
-            )
-          }
-      )
+      return store.getters.monthlyStudyTime.filter((studyTimeRecord) => {
+        return studyTimeRecord.started_at.includes(
+          `${calendarYear}-${formatMonth(calendarMonth)}-${formatDay(
+            props.date
+          )}`
+        )
+      })
     })
 
     const formatStartAndEndAt = (timeStamp) => {

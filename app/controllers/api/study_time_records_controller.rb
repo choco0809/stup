@@ -46,6 +46,5 @@ module Api
     def study_time_record_params
       params.require(:study_time_record).permit(:started_at, :ended_at, :memo)
     end
-
   end
 end

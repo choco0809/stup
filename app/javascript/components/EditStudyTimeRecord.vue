@@ -49,8 +49,7 @@
           id="editStudyRecordButton"
           class="btn btn-info"
           :disabled="isAbleCreateButton"
-          @click="editStudyTimeRecord()"
-        >
+          @click="editStudyTimeRecord()">
           保存
         </button>
       </div>
@@ -93,7 +92,8 @@ export default {
       isAbleCreateButton
     } = useValidateModal()
 
-    const { token, createNewDate, compareStartedAtAndEndedAt } = useStudyTimeRecordFunction()
+    const { token, createNewDate, compareStartedAtAndEndedAt } =
+      useStudyTimeRecordFunction()
     const store = useStore()
     const recordId = ref()
     const startedAt = ref()
@@ -127,35 +127,39 @@ export default {
         },
         credentials: 'same-origin'
       })
-          .then((response) => {
-            return response.json()
+        .then((response) => {
+          return response.json()
+        })
+        .then((json) => {
+          const monthlyStudyTime = store.getters.monthlyStudyTime
+          const updateElementNo = monthlyStudyTime.findIndex(
+            ({ id }) => id === recordId.value
+          )
+          monthlyStudyTime[updateElementNo] = json
+          store.commit('updateMonthlyStudyTime', {
+            monthlyStudyTime
           })
-          .then((json) => {
-            let monthlyStudyTime = store.getters.monthlyStudyTime
-            const updateElementNo = monthlyStudyTime.findIndex(({ id }) => id === recordId.value)
-            monthlyStudyTime[updateElementNo] = json
-            store.commit('updateMonthlyStudyTime', {monthlyStudyTime: monthlyStudyTime})
-            store.commit('closeEditStudyRecordModal')
-          })
-          .catch((error) => {
-            console.warn(error)
-          })
+          store.commit('closeEditStudyRecordModal')
+        })
+        .catch((error) => {
+          console.warn(error)
+        })
     }
 
     const editStudyTimeRecord = () => {
       startedAt.value = createNewDate(
-          store.state.calendarYear,
-          store.state.calendarMonth,
-          props.date,
-          startedAtObject.value.HH,
-          startedAtObject.value.mm
+        store.state.calendarYear,
+        store.state.calendarMonth,
+        props.date,
+        startedAtObject.value.HH,
+        startedAtObject.value.mm
       )
       endedAt.value = createNewDate(
-          store.state.calendarYear,
-          store.state.calendarMonth,
-          props.date,
-          endedAtObject.value.HH,
-          endedAtObject.value.mm
+        store.state.calendarYear,
+        store.state.calendarMonth,
+        props.date,
+        endedAtObject.value.HH,
+        endedAtObject.value.mm
       )
       endedAt.value = compareStartedAtAndEndedAt(startedAt.value, endedAt.value)
       memo.value = memoContent.value

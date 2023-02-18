@@ -20,7 +20,8 @@ export default function () {
   }
 
   const validateMemo = () => {
-    if (memoContent.value === undefined || memoContent.value === null) return true
+    if (memoContent.value === undefined || memoContent.value === null)
+      return true
     if (memoContent.value.length > 20) return '20文字以内で入力してください'
     return true
   }

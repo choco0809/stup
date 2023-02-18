@@ -9,7 +9,12 @@ export default createStore({
     calendar: [],
     monthlyStudyTime: [],
     dailyStudyTimeRecords: [],
-    editStudyTimeRecord: { id: null, startedAt: null, endedAt: null, memo: null },
+    editStudyTimeRecord: {
+      id: null,
+      startedAt: null,
+      endedAt: null,
+      memo: null
+    },
     showModal: false,
     createModal: false,
     editModal: false
