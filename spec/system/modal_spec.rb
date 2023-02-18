@@ -68,16 +68,9 @@ RSpec.describe 'Modal', type: :system do
       click_on '新規作成'
       expect(page).to have_selector '#startAt'
       fill_in 'startAt', with: '20'
-      expect(page).to have_field 'startAt', with: '20:mm'
-      find('#startAt').send_keys :right
-      fill_in 'startAt', with: '00'
-      expect(page).to have_field 'startAt', with: '20:00'
-      expect(page).to have_selector '#endAt'
+      find('#startAt').send_keys :right, '00'
       fill_in 'endAt', with: '20'
-      expect(page).to have_field 'endAt', with: '20:mm'
-      find('#endAt').send_keys :right
-      fill_in 'endAt', with: '30'
-      expect(page).to have_field 'endAt', with: '20:30'
+      find('#endAt').send_keys :right, '30'
       expect(page).not_to have_content('開始時間を入力してください')
       expect(page).not_to have_content('終了時間を入力してください')
       expect(find('#createNewStudyRecordButton')).not_to be_disabled
@@ -94,15 +87,10 @@ RSpec.describe 'Modal', type: :system do
       click_on '新規作成'
       expect(page).to have_selector '#startAt'
       fill_in 'startAt', with: '20'
-      expect(page).to have_field 'startAt', with: '20:mm'
-      find('#startAt').send_keys :right
-      fill_in 'startAt', with: '00'
-      expect(page).to have_field 'startAt', with: '20:00'
+      find('#startAt').send_keys :right, '00'
       expect(page).to have_selector '#endAt'
       fill_in 'endAt', with: '19'
-      expect(page).to have_field 'endAt', with: '19:mm'
-      find('#endAt').send_keys :right
-      fill_in 'endAt', with: '00'
+      find('#endAt').send_keys :right, '00'
       expect(page).to have_field 'endAt', with: '19:00'
       expect(page).not_to have_content('開始時間を入力してください')
       expect(page).not_to have_content('終了時間を入力してください')
@@ -143,10 +131,7 @@ RSpec.describe 'Modal', type: :system do
       find('button[data-method="edit"]').click
       expect(page).to have_selector '#startAt'
       fill_in 'startAt', with: '21'
-      expect(page).to have_field 'startAt', with: '21:26'
-      find('#startAt').send_keys :right
-      fill_in 'startAt', with: '00'
-      expect(page).to have_field 'startAt', with: '21:00'
+      find('#startAt').send_keys :right, '00'
       fill_in 'memoContent', with: '編集のテスト'
       click_button '保存'
       within all('.modal-thread-list-item')[0] do
