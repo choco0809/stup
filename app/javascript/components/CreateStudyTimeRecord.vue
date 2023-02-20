@@ -95,7 +95,7 @@ export default {
       memoContent
     } = useValidateModal()
 
-    const { success } = useFlashMessage()
+    const { successToast, errorToast } = useFlashMessage()
     const store = useStore()
     const startedAt = ref()
     const endedAt = ref()
@@ -123,10 +123,11 @@ export default {
           store.commit('closeShowModal')
           store.commit('closeCreateStudyRecordModal')
           store.commit('addStudyTimeRecord', { studyTimeRecord: json })
-          success('学習記録が作成されました')
+          successToast('学習記録が作成されました')
         })
         .catch((error) => {
           console.warn(error)
+          errorToast('学習記録の作成に失敗しました')
         })
     }
 

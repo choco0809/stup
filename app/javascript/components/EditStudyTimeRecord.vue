@@ -68,6 +68,7 @@ import useValidateModal from './functions/UseValidateModal.vue'
 import useStudyTimeRecordFunction from './functions/UseStudyTimeRecordFunction.vue'
 import { useStore } from 'vuex'
 import { ref, onMounted } from 'vue'
+import useFlashMessage from './functions/UseFlashMessage.vue'
 
 export default {
   name: 'EditStudyTimeRecord',
@@ -94,6 +95,7 @@ export default {
 
     const { token, createNewDate, compareStartedAtAndEndedAt } =
       useStudyTimeRecordFunction()
+    const { successToast, errorToast } = useFlashMessage()
     const store = useStore()
     const recordId = ref()
     const startedAt = ref()
@@ -140,9 +142,11 @@ export default {
             monthlyStudyTime
           })
           store.commit('closeEditStudyRecordModal')
+          successToast('学習記録を編集しました')
         })
         .catch((error) => {
           console.warn(error)
+          errorToast('学習記録の編集に失敗しました')
         })
     }
 
