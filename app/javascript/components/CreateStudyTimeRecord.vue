@@ -123,7 +123,7 @@ export default {
           store.commit('closeShowModal')
           store.commit('closeCreateStudyRecordModal')
           store.commit('addStudyTimeRecord', { studyTimeRecord: json })
-          successToast('学習記録が作成されました')
+          successToast('学習記録を作成しました')
         })
         .catch((error) => {
           console.warn(error)
