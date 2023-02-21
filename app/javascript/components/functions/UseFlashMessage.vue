@@ -3,7 +3,7 @@ import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 
 export default function () {
-  const closeMinutes = 5000
+  const closeMinutes = 3000
 
   const successToast = (message) => {
     toast.success(message,{
