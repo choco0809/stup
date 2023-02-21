@@ -6,14 +6,14 @@ export default function () {
   const closeMinutes = 3000
 
   const successToast = (message) => {
-    toast.success(message,{
+    toast.success(message, {
       autoClose: closeMinutes,
       position: toast.POSITION.TOP_RIGHT
     })
   }
 
   const errorToast = (message) => {
-    toast.error(message,{
+    toast.error(message, {
       autoClose: closeMinutes,
       position: toast.POSITION.TOP_RIGHT
     })
@@ -21,8 +21,7 @@ export default function () {
 
   return {
     successToast,
-    errorToast,
+    errorToast
   }
-
 }
 </script>
