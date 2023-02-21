@@ -97,6 +97,7 @@
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 import useStudyTimeRecordFunction from './functions/UseStudyTimeRecordFunction.vue'
+import useFlashMessage from './functions/UseFlashMessage.vue'
 
 export default {
   name: 'StudyTimeRecordList',
@@ -111,7 +112,7 @@ export default {
     const store = useStore()
     const { token, formatHours, formatMinutes, formatDay, formatMonth } =
       useStudyTimeRecordFunction()
-
+    const { successToast, errorToast } = useFlashMessage()
     const dailyStudyTimeRecords = computed(() => {
       const calendarYear = store.getters.calendarYear
       const calendarMonth = store.getters.calendarMonth
@@ -156,9 +157,11 @@ export default {
         .then((json) => {
           store.commit('deleteStudyTimeRecord', { record: json })
           store.commit('closeShowModal')
+          successToast('学習記録を削除しました')
         })
         .catch((error) => {
           console.warn(error)
+          errorToast('学習記録の削除に失敗しました')
         })
     }
 

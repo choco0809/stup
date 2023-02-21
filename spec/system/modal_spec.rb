@@ -139,5 +139,46 @@ RSpec.describe 'Modal', type: :system do
         expect(page.all('.modal-thread-list-contents')[3]).to have_content '編集のテスト'
       end
     end
+
+    it '学習記録を作成した時に、toastメッセージが表示されること' do
+      visit root_path
+      click_on '学習を記録する'
+      visit '/?calendar=2022-12'
+      expect(page.all('.study-time')[0]).to have_content 'ー'
+      page.all('.study-time')[0].click_on 'ー'
+      click_on '新規作成'
+      expect(page).to have_selector '#startAt'
+      fill_in 'startAt', with: '20'
+      find('#startAt').send_keys :right, '00'
+      fill_in 'endAt', with: '20'
+      find('#endAt').send_keys :right, '30'
+      expect(find('#createNewStudyRecordButton')).not_to be_disabled
+      click_on '作成'
+      expect(page).to have_content('学習記録を作成しました')
+    end
+
+    it '学習記録を削除した時に、toastメッセージが表示されること' do
+      visit root_path
+      click_on '学習を記録する'
+      visit '/?calendar=2022-12'
+      expect(page.all('.study-time')[15]).to have_content '60分'
+      click_on '60分'
+      find('button[data-method="delete"]').click
+      expect(page).to have_content('学習記録を削除しました')
+    end
+
+    it '既存の学習記録を編集した時に、toastメッセージが表示されること' do
+      visit root_path
+      click_on '学習を記録する'
+      visit '/?calendar=2022-12'
+      click_on '60分'
+      find('button[data-method="edit"]').click
+      expect(page).to have_selector '#startAt'
+      fill_in 'startAt', with: '21'
+      find('#startAt').send_keys :right, '00'
+      fill_in 'memoContent', with: '編集のテスト'
+      click_button '保存'
+      expect(page).to have_content('学習記録を編集しました')
+    end
   end
 end

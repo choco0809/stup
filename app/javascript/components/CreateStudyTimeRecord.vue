@@ -68,6 +68,7 @@ import VueTimepicker from 'vue3-timepicker/src/VueTimepicker.vue'
 import { useStore } from 'vuex'
 import useStudyTimeRecordFunction from './functions/UseStudyTimeRecordFunction.vue'
 import useValidateModal from './functions/UseValidateModal.vue'
+import useFlashMessage from './functions/UseFlashMessage.vue'
 
 export default {
   name: 'CreateStudyTimeRecord',
@@ -94,6 +95,7 @@ export default {
       memoContent
     } = useValidateModal()
 
+    const { successToast, errorToast } = useFlashMessage()
     const store = useStore()
     const startedAt = ref()
     const endedAt = ref()
@@ -121,9 +123,11 @@ export default {
           store.commit('closeShowModal')
           store.commit('closeCreateStudyRecordModal')
           store.commit('addStudyTimeRecord', { studyTimeRecord: json })
+          successToast('学習記録を作成しました')
         })
         .catch((error) => {
           console.warn(error)
+          errorToast('学習記録の作成に失敗しました')
         })
     }
 
