@@ -117,13 +117,17 @@ export default {
       const calendarYear = store.getters.calendarYear
       const calendarMonth = store.getters.calendarMonth
 
-      return store.getters.monthlyStudyTime.filter((studyTimeRecord) => {
-        return studyTimeRecord.started_at.includes(
-          `${calendarYear}-${formatMonth(calendarMonth)}-${formatDay(
-            props.date
-          )}`
-        )
-      })
+      return store.getters.monthlyStudyTime
+        .filter((studyTimeRecord) => {
+          return studyTimeRecord.started_at.includes(
+            `${calendarYear}-${formatMonth(calendarMonth)}-${formatDay(
+              props.date
+            )}`
+          )
+        })
+        .sort((a, b) => {
+          return a.started_at < b.started_at ? -1 : 1
+        })
     })
 
     const formatStartAndEndAt = (timeStamp) => {
