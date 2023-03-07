@@ -9,6 +9,11 @@ RSpec.describe 'Modal', type: :system do
   before do
     OmniAuth.config.mock_auth[:discord] = nil
     Rails.application.env_config['omniauth.auth'] = discord_oauth(user[:uid], user[:image])
+    ActionController::Base.allow_forgery_protection = true
+  end
+
+  after do
+    ActionController::Base.allow_forgery_protection = false
   end
 
   describe 'モーダルウィンドウのテスト' do
