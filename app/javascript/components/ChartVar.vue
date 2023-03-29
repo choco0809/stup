@@ -1,92 +1,98 @@
 <template>
-  <Bar :chart-options="chartOptions" :chart-data="chartData" />
+  <canvas id="myChart"></canvas>
 </template>
-
 <script>
-import { Bar } from 'vue-chartjs'
-import {
-  Chart as ChartJS,
-  Title,
-  Tooltip,
-  Legend,
-  BarElement,
-  CategoryScale,
-  LinearScale
-} from 'chart.js'
-
-ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
+import { Chart, LinearScale, CategoryScale, BarController, BarElement, UpdateMode } from 'chart.js'
+import {watch, onMounted, shallowRef} from 'vue'
+import {useStore} from 'vuex'
+Chart.register(LinearScale, CategoryScale, BarController, BarElement)
 
 export default {
-  name: 'ChartVar',
-  components: { Bar },
-  data() {
-    return {
-      chartData: {
-        labels: [
-          '1',
-          '2',
-          '3',
-          '4',
-          '5',
-          '6',
-          '7',
-          '8',
-          '9',
-          '10',
-          '11',
-          '12',
-          '13',
-          '14',
-          '15',
-          '16',
-          '17',
-          '18',
-          '19',
-          '20',
-          '21',
-          '22',
-          '23',
-          '24',
-          '25',
-          '26',
-          '27',
-          '28',
-          '29',
-          '30'
-        ],
-        datasets: [
-          {
-            data: []
-          }
-        ]
-      },
-      chartOptions: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          x: {
-            ticks: {
-              maxRotation: 0,
-              minRotation: 0
-            }
-          },
-          y: {
-            min: 0,
-            ticks: {
-              stepSize: 1,
-              callback: function (tick) {
-                return tick.toString() + 'h'
+  setup(){
+    const store = useStore()
+    let barChart = shallowRef()
+
+    const renderChart = (labels) => {
+      const canvas = document.getElementById("myChart")
+      if (canvas === null) return
+      const ctx = canvas.getContext("2d")
+      barChart = shallowRef(new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: '# of Votes',
+            data: [10],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: {
+                display: false
+              }
+            },
+            x: {
+              ticks: {
+                autoSkip: false,
+                maxRotation: 0,
+                minRotation: 0,
+              },
+              grid: {
+                display: false
               }
             }
           }
-        },
-        plugins: {
-          legend: {
-            display: false
-          }
         }
+      }))
+    }
+
+    const createMonthlyCalendar = () => {
+      const monthlyCalendar = []
+      const year = store.getters.calendarYear
+      const month = store.getters.calendarMonth
+      const endOfMonth = new Date(year, month , 0).getDate()
+      for(let i = 1; i <= 31; i++ ) {
+        if (i <= endOfMonth) {
+          monthlyCalendar.push(i)
+        } else {
+          monthlyCalendar.push(null)
+        }
+
       }
+      return monthlyCalendar
+    }
+
+    onMounted( () => {
+      const label = createMonthlyCalendar()
+      renderChart(label)
+    } )
+
+    const deleteLabelSets = () => {
+      let bar = barChart.value
+      const max = bar.data.labels.length
+      for(let i=0; i < max; i++){
+        bar.data.labels.pop()
+      }
+      bar.update()
+    }
+
+    watch( () => store.getters.calendarMonth, () => {
+      let bar = barChart.value
+      const label = createMonthlyCalendar()
+      deleteLabelSets()
+      label.forEach((elem) => {
+        bar.data.labels.push(elem)
+      })
+      bar.update()
+    }, {deep: true})
+
+    return {
+      barChart,
     }
   }
 }
+
 </script>
