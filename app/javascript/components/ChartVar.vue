@@ -25,39 +25,43 @@ export default {
       if (canvas === null) return
       const ctx = canvas.getContext('2d')
       barChart = shallowRef(
-        new Chart(ctx, {
-          type: 'bar',
-          data: {
-            labels,
-            datasets: [
-              {
-                label: '# of Votes',
-                data: [],
-                borderWidth: 1
-              }
-            ]
-          },
-          options: {
-            scales: {
-              y: {
-                beginAtZero: true,
-                grid: {
-                  display: false
+          new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels,
+              datasets: [
+                {
+                  label: '# of Votes',
+                  data: [],
+                  borderWidth: 1
                 }
-              },
-              x: {
-                ticks: {
-                  autoSkip: false,
-                  maxRotation: 0,
-                  minRotation: 0
+              ]
+            },
+            options: {
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  suggestedMax: 60,
+                  ticks: {
+                    stepSize: 10
+                  },
+                  grid: {
+                    display: false
+                  }
                 },
-                grid: {
-                  display: false
+                x: {
+                  ticks: {
+                    autoSkip: false,
+                    maxRotation: 0,
+                    minRotation: 0
+                  },
+                  grid: {
+                    display: false
+                  }
                 }
               }
             }
-          }
-        })
+          })
       )
     }
 
@@ -107,16 +111,16 @@ export default {
     }
 
     watch(
-      () => store.getters.monthlyStudyTime,
-      () => {
-        const chart = barChart.value
-        const label = createMonthlyCalendar()
-        const dataSets = createDataSets()
-        chart.data.labels = label
-        chart.data.datasets[0].data = dataSets
-        chart.update('none')
-      },
-      { deep: true }
+        () => store.getters.monthlyStudyTime,
+        () => {
+          const chart = barChart.value
+          const label = createMonthlyCalendar()
+          const dataSets = createDataSets()
+          chart.data.labels = label
+          chart.data.datasets[0].data = dataSets
+          chart.update('none')
+        },
+        { deep: true }
     )
 
     return {
