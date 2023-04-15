@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import ChartVar from './components/ChartVar.vue'
+import ChartVar from './components/ChartVer.vue'
 
 export default {
   name: 'ChartJs',
