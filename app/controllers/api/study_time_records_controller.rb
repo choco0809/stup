@@ -3,6 +3,8 @@
 module Api
   class StudyTimeRecordsController < ActionController::API
     include SessionsHelper
+    include ActionController::RequestForgeryProtection
+    protect_from_forgery with: :exception
     before_action :set_user, only: %i[create destroy update]
     before_action :set_study_time_record, only: %i[destroy update]
 
