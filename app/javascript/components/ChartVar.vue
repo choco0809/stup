@@ -41,6 +41,10 @@ export default {
             scales: {
               y: {
                 beginAtZero: true,
+                suggestedMax: 60,
+                ticks: {
+                  stepSize: 10
+                },
                 grid: {
                   display: false
                 }
