@@ -90,6 +90,7 @@ export default {
       const monthlyStudyTime = store.getters.monthlyStudyTime
       const dataSets = monthlyCalendar.map((index) => {
         const totalDailyStudyTime = monthlyStudyTime.filter((record) => {
+          if (index === null) return false
           return record.started_at.substring(8, 10).includes(formatDay(index))
         })
         if (totalDailyStudyTime.length) {
