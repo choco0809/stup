@@ -73,6 +73,12 @@ export default createStore({
     }
   },
   getters: {
+    currentYear(state) {
+      return state.currentYear
+    },
+    currentMonth(state) {
+      return state.currentMonth
+    },
     calendarYear(state) {
       return state.calendarYear
     },
