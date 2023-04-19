@@ -13,51 +13,51 @@
   </div>
   <table class="w-full table-fixed">
     <thead>
-    <tr class="bg-base-200">
-      <th class="border border-black w-1/7">日</th>
-      <th class="border border-black w-1/7">月</th>
-      <th class="border border-black w-1/7">火</th>
-      <th class="border border-black w-1/7">水</th>
-      <th class="border border-black w-1/7">木</th>
-      <th class="border border-black w-1/7">金</th>
-      <th class="border border-black w-1/7">土</th>
-    </tr>
+      <tr class="bg-base-200">
+        <th class="border border-black w-1/7">日</th>
+        <th class="border border-black w-1/7">月</th>
+        <th class="border border-black w-1/7">火</th>
+        <th class="border border-black w-1/7">水</th>
+        <th class="border border-black w-1/7">木</th>
+        <th class="border border-black w-1/7">金</th>
+        <th class="border border-black w-1/7">土</th>
+      </tr>
     </thead>
     <tbody v-for="week in calendarWeeks" :key="week.id">
-    <tr class="text-center">
-      <td
+      <tr class="text-center">
+        <td
           v-for="date in week.value"
           :key="date.weekDay"
           class="border border-black h-16">
-        <div v-if="date.date" class="study-ask">
-          <div>
-            {{ date.date }}
-          </div>
-          <div class="study-time">
-            <div v-if="futureDate(date.date)">▲</div>
-            <div v-else-if="studyTimesLength(date.dailyStudyTime)">
-              <button @click="openModal(date)">ー</button>
+          <div v-if="date.date" class="study-ask">
+            <div>
+              {{ date.date }}
             </div>
-            <div v-else>
-              <button @click="openModal(date)">
-                {{ totalStudyTimes(date.dailyStudyTime) }}分
-              </button>
+            <div class="study-time">
+              <div v-if="futureDate(date.date)">▲</div>
+              <div v-else-if="studyTimesLength(date.dailyStudyTime)">
+                <button @click="openModal(date)">ー</button>
+              </div>
+              <div v-else>
+                <button @click="openModal(date)">
+                  {{ totalStudyTimes(date.dailyStudyTime) }}分
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      </td>
-    </tr>
+        </td>
+      </tr>
     </tbody>
   </table>
   <StudyTimeRecordModal
-      v-show="showModal"
-      :date="modalDate"
-      @close="closeModal"></StudyTimeRecordModal>
+    v-show="showModal"
+    :date="modalDate"
+    @close="closeModal"></StudyTimeRecordModal>
 </template>
 
 <script>
 import StudyTimeRecordModal from './components/StudyTimeRecordModal.vue'
-import {onMounted, computed, ref} from 'vue'
+import { onMounted, computed, ref } from 'vue'
 import { useStore } from 'vuex'
 import useStudyTimeRecordFunction from './components/functions/UseStudyTimeRecordFunction.vue'
 
@@ -72,31 +72,39 @@ export default {
     const modalDate = ref(0)
 
     const firstWday = computed(() => {
-      const firstDay = new Date(store.getters.calendarYear, store.getters.calendarMonth - 1, 1)
+      const firstDay = new Date(
+        store.getters.calendarYear,
+        store.getters.calendarMonth - 1,
+        1
+      )
       return firstDay.getDay()
     })
 
     const lastDate = computed(() => {
-      const lastDay = new Date(store.getters.calendarYear, store.getters.calendarMonth, 0)
+      const lastDay = new Date(
+        store.getters.calendarYear,
+        store.getters.calendarMonth,
+        0
+      )
       return lastDay.getDate()
     })
 
     const calendarDates = computed(() => {
       const calendar = []
-      if(firstWday.value > 0) {
+      if (firstWday.value > 0) {
         for (let blank = 0; blank < firstWday.value; blank++) {
           calendar.push(null)
         }
       }
       for (let date = 1; date <= lastDate.value; date++) {
         const dailyStudyTime = store.getters.monthlyStudyTime.filter(
-            (studyTimeRecord) => {
-              return studyTimeRecord.started_at.includes(
-                  `${store.getters.calendarYear}-${formatMonth(
-                      store.getters.calendarMonth
-                  )}-${formatDay(date)}`
-              )
-            }
+          (studyTimeRecord) => {
+            return studyTimeRecord.started_at.includes(
+              `${store.getters.calendarYear}-${formatMonth(
+                store.getters.calendarMonth
+              )}-${formatDay(date)}`
+            )
+          }
         )
         calendar.push({ date, dailyStudyTime })
       }
@@ -141,25 +149,25 @@ export default {
 
     const fetchMonthlyStudyTimeRecords = () => {
       fetch(
-          `/api/study_time_records?year=${store.getters.calendarYear}&month=${store.getters.calendarMonth}`,
-          {
-            method: 'GET',
-            headers: {
-              'X-Requested-With': 'XMLHttpRequest',
-              'X-CSRF-Token': token()
-            },
-            credentials: 'same-origin'
-          }
+        `/api/study_time_records?year=${store.getters.calendarYear}&month=${store.getters.calendarMonth}`,
+        {
+          method: 'GET',
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-Token': token()
+          },
+          credentials: 'same-origin'
+        }
       )
-          .then((response) => {
-            return response.json()
-          })
-          .then((json) => {
-            store.commit('updateMonthlyStudyTime', { monthlyStudyTime: json })
-          })
-          .catch((error) => {
-            console.warn(error)
-          })
+        .then((response) => {
+          return response.json()
+        })
+        .then((json) => {
+          store.commit('updateMonthlyStudyTime', { monthlyStudyTime: json })
+        })
+        .catch((error) => {
+          console.warn(error)
+        })
     }
 
     const saveState = () => {
@@ -173,9 +181,13 @@ export default {
     const previousMonth = () => {
       if (store.getters.calendarMonth === 1) {
         store.commit('updateCalendarMonth', { month: 12 })
-        store.commit('updateCalendarYear', { year: store.getters.calendarYear - 1 })
+        store.commit('updateCalendarYear', {
+          year: store.getters.calendarYear - 1
+        })
       } else {
-        store.commit('updateCalendarMonth', { month: store.getters.calendarMonth - 1 })
+        store.commit('updateCalendarMonth', {
+          month: store.getters.calendarMonth - 1
+        })
       }
       saveState()
       fetchMonthlyStudyTimeRecords()
@@ -184,9 +196,13 @@ export default {
     const nextMonth = () => {
       if (store.getters.calendarMonth === 12) {
         store.commit('updateCalendarMonth', { month: 1 })
-        store.commit('updateCalendarYear', { year: store.getters.calendarYear + 1 })
+        store.commit('updateCalendarYear', {
+          year: store.getters.calendarYear + 1
+        })
       } else {
-        store.commit('updateCalendarMonth', { month: store.getters.calendarMonth + 1 })
+        store.commit('updateCalendarMonth', {
+          month: store.getters.calendarMonth + 1
+        })
       }
       saveState()
       fetchMonthlyStudyTimeRecords()
@@ -194,8 +210,8 @@ export default {
 
     const newsMonth = () => {
       return (
-          (store.getters.calendarYear === store.getters.currentYear) &
-          (store.getters.calendarMonth === store.getters.currentMonth)
+        (store.getters.calendarYear === store.getters.currentYear) &
+        (store.getters.calendarMonth === store.getters.currentMonth)
       )
     }
 
@@ -210,9 +226,9 @@ export default {
     const futureDate = (date) => {
       const nowDate = getFormattedNowDate()
       const targetDate =
-          store.getters.calendarYear +
-          formatMonth(store.getters.calendarMonth) +
-          formatDay(date)
+        store.getters.calendarYear +
+        formatMonth(store.getters.calendarMonth) +
+        formatDay(date)
       return targetDate > nowDate
     }
 
@@ -267,7 +283,7 @@ export default {
       studyTimesLength,
       totalStudyTimes,
       openModal,
-      closeModal,
+      closeModal
     }
   }
 }
