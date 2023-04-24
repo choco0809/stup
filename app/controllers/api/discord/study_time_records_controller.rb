@@ -11,7 +11,7 @@ module Api
         study_time_records = @user.study_time_records
         return render status: :ok, json: { message: '前回の学習記録が終了していません' } if check_ready_started?(study_time_records.all)
 
-        study_time_record = study_time_records.new(started_at: params[:started_at])
+        study_time_record = study_time_records.new(started_at: params[:started_at], memo: params[:memo])
         if study_time_record.save
           render status: :ok, json: { message: '学習の記録を開始しました' }
         else
