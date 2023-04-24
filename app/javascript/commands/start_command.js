@@ -27,7 +27,7 @@ function startCommand(client) {
           return response.json()
         })
         .then((data) => {
-          interaction.reply(data.message)
+          return interaction.reply({ content: data.message, ephemeral: true })
         })
         .catch((error) => {
           console.warn(error)
