@@ -107,10 +107,12 @@ export default {
     }
 
     const convertHoursToString = (date) => {
+      if (date === null) return null
       return new Date(date).getHours().toString().padStart(2, '0')
     }
 
     const convertMinutesToString = (date) => {
+      if (date === null) return null
       return new Date(date).getMinutes().toString().padStart(2, '0')
     }
 
