@@ -83,7 +83,7 @@ export default {
     }
   },
   setup(props) {
-    const { token, createNewDate, compareStartedAtAndEndedAt } =
+    const { token, compareStartedAtAndEndedAt, createStartAndEndDate } =
       useStudyTimeRecordFunction()
     const {
       errorStartedAtMessage,
@@ -131,22 +131,14 @@ export default {
         })
     }
 
-    const createStartAndEndDate = (atObject) => {
-      return createNewDate(
-          store.state.calendarYear,
-          store.state.calendarMonth,
-          props.date,
-          atObject.value.HH,
-          atObject.value.mm
-      )
-    }
-
     const newStudyTimeRecord = () => {
-      startedAt.value = createStartAndEndDate(startedAtObject)
+      const calendarYear = store.state.calendarYear
+      const calendarMonth = store.state.calendarMonth
+      startedAt.value = createStartAndEndDate(calendarYear,calendarMonth, props.date, startedAtObject)
       if (endedAtObject.value === undefined) {
         endedAt.value = null
       } else {
-        endedAt.value = createStartAndEndDate(endedAtObject)
+        endedAt.value = createStartAndEndDate(calendarYear,calendarMonth, props.date,endedAtObject)
         endedAt.value = compareStartedAtAndEndedAt(startedAt.value, endedAt.value)
       }
       memo.value = memoContent.value
