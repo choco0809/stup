@@ -93,7 +93,7 @@ export default {
       isAbleCreateButton
     } = useValidateModal()
 
-    const { token, createNewDate, compareStartedAtAndEndedAt } =
+    const { token, compareStartedAtAndEndedAt, createStartAndEndDate } =
       useStudyTimeRecordFunction()
     const { successToast, errorToast } = useFlashMessage()
     const store = useStore()
@@ -153,21 +153,15 @@ export default {
     }
 
     const editStudyTimeRecord = () => {
-      startedAt.value = createNewDate(
-        store.state.calendarYear,
-        store.state.calendarMonth,
-        props.date,
-        startedAtObject.value.HH,
-        startedAtObject.value.mm
-      )
-      endedAt.value = createNewDate(
-        store.state.calendarYear,
-        store.state.calendarMonth,
-        props.date,
-        endedAtObject.value.HH,
-        endedAtObject.value.mm
-      )
-      endedAt.value = compareStartedAtAndEndedAt(startedAt.value, endedAt.value)
+      const calendarYear = store.state.calendarYear
+      const calendarMonth = store.state.calendarMonth
+      startedAt.value = createStartAndEndDate(calendarYear, calendarMonth, props.date, startedAtObject)
+      if (endedAtObject.value.HH === null && endedAtObject.value.mm === null ) {
+        endedAt.value = null
+      } else {
+        endedAt.value = createStartAndEndDate(calendarYear,calendarMonth, props.date,endedAtObject)
+        endedAt.value = compareStartedAtAndEndedAt(startedAt.value, endedAt.value)
+      }
       memo.value = memoContent.value
       fetchEditStudyTimeRecord()
     }
