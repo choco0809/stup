@@ -16,9 +16,9 @@ module Api
         return render status: :ok, json: { message: UNREGISTERED_USER } if @user.nil?
 
         @study_time_records = @user.study_time_records
-        latest_records = @study_time_records.all.last
         if @study_time_records.check_ready_started?
-          return render status: :ok, json: { message: reply_incomplete_report(latest_records) }
+          latest_record = @study_time_records.all.last
+          return render status: :ok, json: { message: reply_incomplete_report(latest_record) }
         end
 
         new_record = @study_time_records.new(started_at: params[:started_at], memo: params[:memo])
@@ -29,10 +29,10 @@ module Api
       def update
         return render status: :ok, json: { message: UNREGISTERED_USER } if @user.nil?
 
-        @latest_records = @user.study_time_records.last
-        return render status: :ok, json: { message: NOT_STARTED } if @latest_records.check_ready_ended?
+        @study_time_records = @user.study_time_records
+        return render status: :ok, json: { message: NOT_STARTED } if @study_time_records.check_ready_ended?
 
-        @latest_records.update!(ended_at: params[:ended_at])
+        @study_time_records.update!(ended_at: params[:ended_at])
         render status: :ok, json: { message: FINISH_REPORT }
       end
 
@@ -43,7 +43,7 @@ module Api
       end
 
       def format_time_zone(time)
-        time.strftime('%Y/%M/%d %H:%M')
+        time.strftime('%Y/%m/%d %H:%M')
       end
 
       def set_user
