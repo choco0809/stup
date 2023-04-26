@@ -13,7 +13,9 @@ export default function () {
 
   const validateEndedAt = () => {
     if (endedAtObject === undefined || endedAtObject.value === undefined)
-      return false
+      return true
+    if (endedAtObject.value.HH === '' && endedAtObject.value.mm === '')
+      return true
     if (endedAtObject.value.HH === '' || endedAtObject.value.mm === '')
       return '終了時間を入力してください'
     return true

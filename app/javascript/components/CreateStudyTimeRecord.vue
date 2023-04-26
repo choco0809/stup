@@ -131,22 +131,24 @@ export default {
         })
     }
 
+    const createStartAndEndDate = (atObject) => {
+      return createNewDate(
+          store.state.calendarYear,
+          store.state.calendarMonth,
+          props.date,
+          atObject.value.HH,
+          atObject.value.mm
+      )
+    }
+
     const newStudyTimeRecord = () => {
-      startedAt.value = createNewDate(
-        store.state.calendarYear,
-        store.state.calendarMonth,
-        props.date,
-        startedAtObject.value.HH,
-        startedAtObject.value.mm
-      )
-      endedAt.value = createNewDate(
-        store.state.calendarYear,
-        store.state.calendarMonth,
-        props.date,
-        endedAtObject.value.HH,
-        endedAtObject.value.mm
-      )
-      endedAt.value = compareStartedAtAndEndedAt(startedAt.value, endedAt.value)
+      startedAt.value = createStartAndEndDate(startedAtObject)
+      if (endedAtObject.value === undefined) {
+        endedAt.value = null
+      } else {
+        endedAt.value = createStartAndEndDate(endedAtObject)
+        endedAt.value = compareStartedAtAndEndedAt(startedAt.value, endedAt.value)
+      }
       memo.value = memoContent.value
       fetchCreateDailyStudyTimeRecords()
     }
