@@ -156,9 +156,7 @@ export default {
       const calendarYear = store.state.calendarYear
       const calendarMonth = store.state.calendarMonth
       startedAt.value = createStartAndEndDate(calendarYear, calendarMonth, props.date, startedAtObject)
-      if (endedAtObject.value.HH === null && endedAtObject.value.mm === null ) {
-        endedAt.value = null
-      } else if(endedAtObject.value.HH === '' && endedAtObject.value.mm === '') {
+      if (!endedAtObject.value.HH && !endedAtObject.value.mm) {
         endedAt.value = null
       } else {
         endedAt.value = createStartAndEndDate(calendarYear,calendarMonth, props.date,endedAtObject)
