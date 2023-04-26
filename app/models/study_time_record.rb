@@ -17,5 +17,14 @@ class StudyTimeRecord < ApplicationRecord
         .where("to_char(started_at,'yyyy') = ?", year)
         .where("to_char(started_at,'mm') = ?", month)
     end
+
+    def check_ready_started?
+      records = all
+      !records.empty? && records.last.ended_at.nil?
+    end
+  end
+
+  def check_ready_ended?
+    nil? || [:ended_at].nil?
   end
 end
