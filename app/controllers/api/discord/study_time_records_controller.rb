@@ -16,7 +16,9 @@ module Api
         return render status: :ok, json: { message: UNREGISTERED_USER } if @user.nil?
 
         study_time_records = @user.study_time_records
-        return render status: :ok, json: { message: INCOMPLETE_REPORT } if check_ready_started?(study_time_records.all)
+        if check_ready_started?(study_time_records)
+          return render status: :ok, json: { message: reply_incomplete_report(study_time_records) }
+        end
 
         study_time_record = study_time_records.new(started_at: params[:started_at], memo: params[:memo])
         study_time_record.save!
@@ -35,12 +37,22 @@ module Api
 
       private
 
-      def check_ready_started?(records)
+      def check_ready_started?(study_time_records)
+        records = study_time_records.all
         !records.empty? && records.last.ended_at.nil?
       end
 
       def check_ready_ended?(records)
         records.nil? || !records.ended_at.nil?
+      end
+
+      def reply_incomplete_report(records)
+        last_record = records.all.last.started_at
+        "#{INCOMPLETE_REPORT}\n#{format_time_zone(last_record)}"
+      end
+
+      def format_time_zone(time)
+        time.strftime('%Y/%M/%d %H:%M')
       end
 
       def set_user
