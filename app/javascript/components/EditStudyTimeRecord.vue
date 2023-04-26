@@ -158,6 +158,8 @@ export default {
       startedAt.value = createStartAndEndDate(calendarYear, calendarMonth, props.date, startedAtObject)
       if (endedAtObject.value.HH === null && endedAtObject.value.mm === null ) {
         endedAt.value = null
+      } else if(endedAtObject.value.HH === '' && endedAtObject.value.mm === '') {
+        endedAt.value = null
       } else {
         endedAt.value = createStartAndEndDate(calendarYear,calendarMonth, props.date,endedAtObject)
         endedAt.value = compareStartedAtAndEndedAt(startedAt.value, endedAt.value)
