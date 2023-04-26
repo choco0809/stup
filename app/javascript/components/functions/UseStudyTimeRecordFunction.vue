@@ -31,13 +31,18 @@ export default function () {
     return endAt
   }
 
-  const createStartAndEndDate = (calendarYear, calendarMonth, date, atObject) => {
+  const createStartAndEndDate = (
+    calendarYear,
+    calendarMonth,
+    date,
+    atObject
+  ) => {
     return createNewDate(
-        calendarYear,
-        calendarMonth,
-        date,
-        atObject.value.HH,
-        atObject.value.mm
+      calendarYear,
+      calendarMonth,
+      date,
+      atObject.value.HH,
+      atObject.value.mm
     )
   }
 

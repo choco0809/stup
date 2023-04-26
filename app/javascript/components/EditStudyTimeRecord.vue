@@ -155,12 +155,25 @@ export default {
     const editStudyTimeRecord = () => {
       const calendarYear = store.state.calendarYear
       const calendarMonth = store.state.calendarMonth
-      startedAt.value = createStartAndEndDate(calendarYear, calendarMonth, props.date, startedAtObject)
+      startedAt.value = createStartAndEndDate(
+        calendarYear,
+        calendarMonth,
+        props.date,
+        startedAtObject
+      )
       if (!endedAtObject.value.HH && !endedAtObject.value.mm) {
         endedAt.value = null
       } else {
-        endedAt.value = createStartAndEndDate(calendarYear,calendarMonth, props.date,endedAtObject)
-        endedAt.value = compareStartedAtAndEndedAt(startedAt.value, endedAt.value)
+        endedAt.value = createStartAndEndDate(
+          calendarYear,
+          calendarMonth,
+          props.date,
+          endedAtObject
+        )
+        endedAt.value = compareStartedAtAndEndedAt(
+          startedAt.value,
+          endedAt.value
+        )
       }
       memo.value = memoContent.value
       fetchEditStudyTimeRecord()

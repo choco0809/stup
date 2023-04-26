@@ -86,7 +86,7 @@ RSpec.describe Api::Discord::StudyTimeRecordsController, type: :controller do
         record = StudyTimeRecord.find_by(user_id: user.id)
 
         expect(response).to have_http_status '200'
-        expect(response.parsed_body['message']).to eq "学習の記録を開始しました🙆"
+        expect(response.parsed_body['message']).to eq '学習の記録を開始しました🙆'
 
         # 学習記録を終了する
         patch :update, params: {
@@ -95,7 +95,7 @@ RSpec.describe Api::Discord::StudyTimeRecordsController, type: :controller do
         }
 
         expect(response).to have_http_status '200'
-        expect(response.parsed_body['message']).to eq "学習が終了しました🙆"
+        expect(response.parsed_body['message']).to eq '学習が終了しました🙆'
         expect(StudyTimeRecord.find(record.id).ended_at).to eq '2022-12-11 16:00:00.000000000 +0900'
       end
     end
