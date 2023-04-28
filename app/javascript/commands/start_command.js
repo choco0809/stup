@@ -40,7 +40,7 @@ function startCommand(client) {
 }
 
 function validateLength(value) {
-  return value.length <= 20 ? true : false
+  return value.length <= 20
 }
 
 function truncateSeconds(date) {
