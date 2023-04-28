@@ -3,7 +3,13 @@ const { REST, Routes } = require('discord.js')
 const commands = [
   {
     name: 'start',
-    description: '学習時間の記録を開始します。'
+    description: '学習時間の記録を開始します。',
+    options : [{
+      type: 3,
+      name: 'メモ',
+      description: '20文字以内のメモを登録できます。',
+      required: false
+    }]
   },
   {
     name: 'end',
