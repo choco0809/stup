@@ -53,4 +53,5 @@ processes = []
 
 [processes]
 web = "bundle exec rails server -b [::] -p 8080"
+slash_command = "node ./app/javascript/commands/slash_commands.js"
 discord_bot = "node ./app/javascript/commands/discord_bot.js"
