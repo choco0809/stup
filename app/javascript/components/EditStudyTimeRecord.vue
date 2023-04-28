@@ -93,7 +93,7 @@ export default {
       isAbleCreateButton
     } = useValidateModal()
 
-    const { token, createNewDate, compareStartedAtAndEndedAt } =
+    const { token, compareStartedAtAndEndedAt, createStartAndEndDate } =
       useStudyTimeRecordFunction()
     const { successToast, errorToast } = useFlashMessage()
     const store = useStore()
@@ -107,10 +107,12 @@ export default {
     }
 
     const convertHoursToString = (date) => {
+      if (date === null) return null
       return new Date(date).getHours().toString().padStart(2, '0')
     }
 
     const convertMinutesToString = (date) => {
+      if (date === null) return null
       return new Date(date).getMinutes().toString().padStart(2, '0')
     }
 
@@ -151,21 +153,28 @@ export default {
     }
 
     const editStudyTimeRecord = () => {
-      startedAt.value = createNewDate(
-        store.state.calendarYear,
-        store.state.calendarMonth,
+      const calendarYear = store.state.calendarYear
+      const calendarMonth = store.state.calendarMonth
+      startedAt.value = createStartAndEndDate(
+        calendarYear,
+        calendarMonth,
         props.date,
-        startedAtObject.value.HH,
-        startedAtObject.value.mm
+        startedAtObject
       )
-      endedAt.value = createNewDate(
-        store.state.calendarYear,
-        store.state.calendarMonth,
-        props.date,
-        endedAtObject.value.HH,
-        endedAtObject.value.mm
-      )
-      endedAt.value = compareStartedAtAndEndedAt(startedAt.value, endedAt.value)
+      if (!endedAtObject.value.HH && !endedAtObject.value.mm) {
+        endedAt.value = null
+      } else {
+        endedAt.value = createStartAndEndDate(
+          calendarYear,
+          calendarMonth,
+          props.date,
+          endedAtObject
+        )
+        endedAt.value = compareStartedAtAndEndedAt(
+          startedAt.value,
+          endedAt.value
+        )
+      }
       memo.value = memoContent.value
       fetchEditStudyTimeRecord()
     }

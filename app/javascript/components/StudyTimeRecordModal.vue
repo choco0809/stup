@@ -1,6 +1,7 @@
 <template>
   <div
-    class="z-10 fixed top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center">
+    class="z-10 fixed top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center"
+    @click.self="closeEmit">
     <div class="bg-white rounded-lg z-20 w-2/4 pt-5 pb-5">
       <div class="flex justify-center">
         <div class="text-center mb-3 basis-5/6 h-full text-lg font-bold">

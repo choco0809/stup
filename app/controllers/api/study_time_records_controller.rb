@@ -5,7 +5,7 @@ module Api
     include SessionsHelper
     include ActionController::RequestForgeryProtection
     protect_from_forgery with: :exception
-    before_action :set_user, only: %i[create destroy update]
+    before_action :set_user, only: %i[create destroy update show]
     before_action :set_study_time_record, only: %i[destroy update]
 
     def create
@@ -22,11 +22,7 @@ module Api
     def show
       year = params[:year]
       month = format('%02d', params[:month])
-      @study_time_records = if month.nil?
-                              StudyTimeRecord.annual_study_records(current_user, year)
-                            else
-                              StudyTimeRecord.monthly_study_records(current_user, year, month)
-                            end
+      @study_time_records = @user.study_time_records.monthly_study_records(year, month)
     end
 
     def update

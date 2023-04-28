@@ -83,7 +83,7 @@ export default {
     }
   },
   setup(props) {
-    const { token, createNewDate, compareStartedAtAndEndedAt } =
+    const { token, compareStartedAtAndEndedAt, createStartAndEndDate } =
       useStudyTimeRecordFunction()
     const {
       errorStartedAtMessage,
@@ -132,21 +132,31 @@ export default {
     }
 
     const newStudyTimeRecord = () => {
-      startedAt.value = createNewDate(
-        store.state.calendarYear,
-        store.state.calendarMonth,
+      const calendarYear = store.state.calendarYear
+      const calendarMonth = store.state.calendarMonth
+      startedAt.value = createStartAndEndDate(
+        calendarYear,
+        calendarMonth,
         props.date,
-        startedAtObject.value.HH,
-        startedAtObject.value.mm
+        startedAtObject
       )
-      endedAt.value = createNewDate(
-        store.state.calendarYear,
-        store.state.calendarMonth,
-        props.date,
-        endedAtObject.value.HH,
-        endedAtObject.value.mm
-      )
-      endedAt.value = compareStartedAtAndEndedAt(startedAt.value, endedAt.value)
+      if (
+        endedAtObject.value === undefined ||
+        (!endedAtObject.value.HH && !endedAtObject.value.mm)
+      ) {
+        endedAt.value = null
+      } else {
+        endedAt.value = createStartAndEndDate(
+          calendarYear,
+          calendarMonth,
+          props.date,
+          endedAtObject
+        )
+        endedAt.value = compareStartedAtAndEndedAt(
+          startedAt.value,
+          endedAt.value
+        )
+      }
       memo.value = memoContent.value
       fetchCreateDailyStudyTimeRecords()
     }

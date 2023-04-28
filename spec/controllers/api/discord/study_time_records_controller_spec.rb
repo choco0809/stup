@@ -12,7 +12,7 @@ RSpec.describe Api::Discord::StudyTimeRecordsController, type: :controller do
           started_at: '2022/12/11 15:00:00'
         }
         expect(response).to have_http_status '200'
-        expect(response.parsed_body['message']).to eq 'ユーザーが未登録です'
+        expect(response.parsed_body['message']).to eq "ユーザーが登録されていません。\n下記のURLからユーザー登録を行った後、再度実行して下さい🙇\nhttps://stup.fly.dev/"
         expect(StudyTimeRecord.count).to eq 0
       end
     end
@@ -26,7 +26,7 @@ RSpec.describe Api::Discord::StudyTimeRecordsController, type: :controller do
         }
         record = StudyTimeRecord.find_by(user_id: user.id)
         expect(response).to have_http_status '200'
-        expect(response.parsed_body['message']).to eq '学習の記録を開始しました'
+        expect(response.parsed_body['message']).to eq '学習の記録を開始しました🙆'
         expect(StudyTimeRecord.find(record.id).started_at).to eq '2022-12-11 15:00:00.000000000 +0900'
         expect(StudyTimeRecord.count).to eq 1
       end
@@ -45,7 +45,7 @@ RSpec.describe Api::Discord::StudyTimeRecordsController, type: :controller do
         }
 
         expect(response).to have_http_status '200'
-        expect(response.parsed_body['message']).to eq '前回の学習記録が終了していません'
+        expect(response.parsed_body['message']).to eq "前回の学習記録が終了していません🙅\n2022/12/11 15:00"
         expect(StudyTimeRecord.count).to eq 1
       end
     end
@@ -60,7 +60,7 @@ RSpec.describe Api::Discord::StudyTimeRecordsController, type: :controller do
           ended_at: '2022/12/11 15:00:00'
         }
         expect(response).to have_http_status '200'
-        expect(response.parsed_body['message']).to eq 'ユーザーが未登録です'
+        expect(response.parsed_body['message']).to eq "ユーザーが登録されていません。\n下記のURLからユーザー登録を行った後、再度実行して下さい🙇\nhttps://stup.fly.dev/"
         expect(StudyTimeRecord.count).to eq 0
       end
     end
@@ -73,7 +73,7 @@ RSpec.describe Api::Discord::StudyTimeRecordsController, type: :controller do
           ended_at: '2022/12/11 15:00:00'
         }
         expect(response).to have_http_status '200'
-        expect(response.parsed_body['message']).to eq '学習が開始されていません'
+        expect(response.parsed_body['message']).to eq "学習が開始されていません。\n学習の記録を開始してください🙇"
         expect(StudyTimeRecord.count).to eq 0
       end
 
@@ -86,7 +86,7 @@ RSpec.describe Api::Discord::StudyTimeRecordsController, type: :controller do
         record = StudyTimeRecord.find_by(user_id: user.id)
 
         expect(response).to have_http_status '200'
-        expect(response.parsed_body['message']).to eq '学習の記録を開始しました'
+        expect(response.parsed_body['message']).to eq '学習の記録を開始しました🙆'
 
         # 学習記録を終了する
         patch :update, params: {
@@ -95,7 +95,7 @@ RSpec.describe Api::Discord::StudyTimeRecordsController, type: :controller do
         }
 
         expect(response).to have_http_status '200'
-        expect(response.parsed_body['message']).to eq '学習が終了しました'
+        expect(response.parsed_body['message']).to eq '学習が終了しました🙆'
         expect(StudyTimeRecord.find(record.id).ended_at).to eq '2022-12-11 16:00:00.000000000 +0900'
       end
     end
