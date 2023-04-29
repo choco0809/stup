@@ -16,4 +16,8 @@ class StudyTimeRecord < ApplicationRecord
   def self.check_ready_ended?
     all.empty? || !last.ended_at.nil?
   end
+
+  def within_24_hours?(ended_at)
+    ((Time.zone.parse(ended_at) - started_at) / 1.days).floor != 0
+  end
 end

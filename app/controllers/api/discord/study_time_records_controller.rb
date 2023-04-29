@@ -11,6 +11,7 @@ module Api
       FINISH_REPORT = '学習が終了しました🙆'
       INCOMPLETE_REPORT = '前回の学習記録が終了していません🙅'
       NOT_STARTED = "学習が開始されていません。\n学習の記録を開始してください🙇"
+      OVER_24_HOURS = "前回の学習記録から24時間以上経過しています。\n下記のURLから手動にて終了時間を記入して下さい🙇\n#{STUP_URL}".freeze
 
       def create
         return render status: :ok, json: { message: UNREGISTERED_USER } if @user.nil?
@@ -30,6 +31,10 @@ module Api
 
         @study_time_records = @user.study_time_records
         return render status: :ok, json: { message: NOT_STARTED } if @study_time_records.check_ready_ended?
+
+        if @study_time_records.last.within_24_hours?(params[:ended_at])
+          return render status: :ok, json: { message: OVER_24_HOURS }
+        end
 
         @study_time_records.last.update!(ended_at: params[:ended_at])
         render status: :ok, json: { message: FINISH_REPORT }
