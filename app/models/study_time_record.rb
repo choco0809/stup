@@ -10,10 +10,14 @@ class StudyTimeRecord < ApplicationRecord
   }
 
   def self.check_ready_started?
-    !all.empty? && all.last.ended_at.nil?
+    !all.empty? && last.ended_at.nil?
   end
 
   def self.check_ready_ended?
-    all.empty? || !all.last.ended_at.nil?
+    all.empty? || !last.ended_at.nil?
+  end
+
+  def within_24_hours?(ended_at)
+    (Time.zone.parse(ended_at) - started_at) > 24.hours
   end
 end
