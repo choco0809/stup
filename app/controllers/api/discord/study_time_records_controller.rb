@@ -14,36 +14,52 @@ module Api
       OVER_24_HOURS = "前回の学習記録から24時間以上経過しています。\n下記のURLから手動にて終了時間を記入して下さい🙇\n#{STUP_URL}".freeze
 
       def create
-        return render status: :ok, json: { message: UNREGISTERED_USER } if @user.nil?
+        return render_unregistered_user if @user.nil?
 
         @study_time_records = @user.study_time_records
-        if @study_time_records.check_ready_started?
-          return render status: :ok, json: { message: reply_incomplete_report(@study_time_records.last) }
-        end
+        return render_incomplete_report if @study_time_records.check_ready_started?
 
         new_record = @study_time_records.new(started_at: params[:started_at], memo: params[:memo])
         new_record.save!
-        render status: :ok, json: { message: START_REPORT }
+        render_started_report
       end
 
       def update
-        return render status: :ok, json: { message: UNREGISTERED_USER } if @user.nil?
+        return render_unregistered_user if @user.nil?
 
         @study_time_records = @user.study_time_records
-        return render status: :ok, json: { message: NOT_STARTED } if @study_time_records.check_ready_ended?
-
-        if @study_time_records.last.within_24_hours?(params[:ended_at])
-          return render status: :ok, json: { message: OVER_24_HOURS }
-        end
+        return render_not_started_report if @study_time_records.check_ready_ended?
+        return render_over_24_hours_report if @study_time_records.last.within_24_hours?(params[:ended_at])
 
         @study_time_records.last.update!(ended_at: params[:ended_at])
-        render status: :ok, json: { message: FINISH_REPORT }
+        render_finished_report
       end
 
       private
 
-      def reply_incomplete_report(latest_record)
-        "#{INCOMPLETE_REPORT}\n#{format_time_zone(latest_record.started_at)}"
+      def render_unregistered_user
+        render status: :ok, json: { message: UNREGISTERED_USER }
+      end
+
+      def render_incomplete_report
+        incomplete_report_message = "#{INCOMPLETE_REPORT}\n#{format_time_zone(@study_time_records.last.started_at)}"
+        render status: :ok, json: { message: incomplete_report_message }
+      end
+
+      def render_started_report
+        render status: :ok, json: { message: START_REPORT }
+      end
+
+      def render_finished_report
+        render status: :ok, json: { message: FINISH_REPORT }
+      end
+
+      def render_not_started_report
+        render status: :ok, json: { message: NOT_STARTED }
+      end
+
+      def render_over_24_hours_report
+        render status: :ok, json: { message: OVER_24_HOURS }
       end
 
       def format_time_zone(time)
