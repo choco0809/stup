@@ -18,6 +18,6 @@ class StudyTimeRecord < ApplicationRecord
   end
 
   def within_24_hours?(ended_at)
-    ((Time.zone.parse(ended_at) - started_at) / 1.days).floor != 0
+    (Time.zone.parse(ended_at) - started_at) > 24.hours
   end
 end
