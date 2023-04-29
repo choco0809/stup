@@ -107,6 +107,28 @@ RSpec.describe Api::Discord::StudyTimeRecordsController, type: :controller do
         expect(response.parsed_body['message']).to eq FINISH_REPORT
         expect(StudyTimeRecord.find(record.id).ended_at).to eq '2022-12-11 16:00:00.000000000 +0900'
       end
+
+      it '前回の学習記録から、終了時間が24時間以上経過している場合は手動にて終了時間を記入するようにリプライされること' do
+        # 学習記録を作成する
+        post :create, params: {
+          uid: user.uid,
+          started_at: '2022/12/11 15:00:00'
+        }
+        record = StudyTimeRecord.find_by(user_id: user.id)
+
+        expect(response).to have_http_status '200'
+        expect(response.parsed_body['message']).to eq START_REPORT
+
+        # 学習記録を終了する（※更新されない）
+        patch :update, params: {
+          uid: user.uid,
+          ended_at: '2022/12/13 16:00:00'
+        }
+
+        expect(response).to have_http_status '200'
+        expect(response.parsed_body['message']).to eq OVER_24_HOURS
+        expect(StudyTimeRecord.find(record.id).ended_at).to eq nil
+      end
     end
   end
 end
