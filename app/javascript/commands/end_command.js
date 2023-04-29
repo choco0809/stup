@@ -1,4 +1,5 @@
 const fetch = require('node-fetch')
+const { truncateSeconds } = require('./common')
 
 function endCommand(client) {
   client.on('interactionCreate', async (interaction) => {
@@ -27,15 +28,6 @@ function endCommand(client) {
         })
     }
   })
-}
-
-function truncateSeconds(date) {
-  const year = date.getFullYear()
-  const month = date.getMonth() + 1
-  const day = date.getDate()
-  const hours = date.getHours()
-  const minutes = date.getMinutes()
-  return new Date(`${year}/${month}/${day} ${hours}:${minutes}`)
 }
 
 module.exports = endCommand
