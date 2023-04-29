@@ -3,17 +3,15 @@
 require 'rails_helper'
 
 RSpec.describe Api::Discord::StudyTimeRecordsController, type: :controller do
-  before do
-    stub_const(STUP_URL, 'https://stup.fly.dev/')
-    stub_const(UNREGISTERED_USER, "ユーザーが登録されていません。\n下記のURLからユーザー登録を行った後、再度実行して下さい🙇\n#{STUP_URL}".freeze)
-    stub_const(START_REPORT, '学習の記録を開始しました🙆')
-    stub_const(FINISH_REPORT, '学習が終了しました🙆')
-    stub_const(INCOMPLETE_REPORT, '前回の学習記録が終了していません🙅')
-    stub_const(NOT_STARTED, "学習が開始されていません。\n学習の記録を開始してください🙇")
-    stub_const(OVER_24_HOURS, "前回の学習記録から24時間以上経過しています。\n下記のURLから手動にて終了時間を記入して下さい🙇\n#{STUP_URL}".freeze)
-  end
-
   describe 'create' do
+    STUP_URL = 'https://stup.fly.dev/'
+    UNREGISTERED_USER = "ユーザーが登録されていません。\n下記のURLからユーザー登録を行った後、再度実行して下さい🙇\n#{STUP_URL}".freeze
+    START_REPORT = '学習の記録を開始しました🙆'
+    FINISH_REPORT = '学習が終了しました🙆'
+    INCOMPLETE_REPORT = '前回の学習記録が終了していません🙅'
+    NOT_STARTED = "学習が開始されていません。\n学習の記録を開始してください🙇"
+    OVER_24_HOURS = "前回の学習記録から24時間以上経過しています。\n下記のURLから手動にて終了時間を記入して下さい🙇\n#{STUP_URL}".freeze
+
     let(:user) { FactoryBot.build(:user, uid: '1234567') }
     context 'ユーザーが未登録の場合' do
       it 'ユーザーが未登録の場合、学習記録は作成されないこと' do
