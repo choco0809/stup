@@ -25,12 +25,8 @@ function startCommand(client) {
           'Content-Type': 'application/json'
         }
       })
-        .then((response) => {
-          return response.json()
-        })
-        .then((data) => {
-          return interaction.reply({ content: data.message, ephemeral: true })
-        })
+        .then((response) => response.json())
+        .then((data) => interaction.reply({ content: data.message, ephemeral: true }))
         .catch((error) => {
           console.warn(error)
         })
