@@ -32,7 +32,7 @@ module Api
         @study_time_records = @user.study_time_records
         return render status: :ok, json: { message: NOT_STARTED } if @study_time_records.check_ready_ended?
 
-        @study_time_records.update!(ended_at: params[:ended_at])
+        @study_time_records.last.update!(ended_at: params[:ended_at])
         render status: :ok, json: { message: FINISH_REPORT }
       end
 
