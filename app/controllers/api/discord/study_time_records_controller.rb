@@ -17,8 +17,7 @@ module Api
 
         @study_time_records = @user.study_time_records
         if @study_time_records.check_ready_started?
-          latest_record = @study_time_records.all.last
-          return render status: :ok, json: { message: reply_incomplete_report(latest_record) }
+          return render status: :ok, json: { message: reply_incomplete_report(@study_time_records.last) }
         end
 
         new_record = @study_time_records.new(started_at: params[:started_at], memo: params[:memo])
