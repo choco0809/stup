@@ -76,20 +76,14 @@ export default {
     const modalDate = ref(0)
 
     const firstWday = computed(() => {
-      const firstDay = new Date(
-        store.getters.calendarYear,
-        store.getters.calendarMonth - 1,
-        1
-      )
+      const { calendarYear, calendarMonth } = store.getters
+      const firstDay = new Date(calendarYear, calendarMonth - 1, 1)
       return firstDay.getDay()
     })
 
     const lastDate = computed(() => {
-      const lastDay = new Date(
-        store.getters.calendarYear,
-        store.getters.calendarMonth,
-        0
-      )
+      const { calendarYear, calendarMonth } = store.getters
+      const lastDay = new Date(calendarYear, calendarMonth, 0)
       return lastDay.getDate()
     })
 
