@@ -142,14 +142,14 @@ export default {
       const params = new URLSearchParams(location.search)
       const yearMonth = params.get('calendar') || ''
       const match = /(\d{4})-(\d{2})/.exec(yearMonth)
-      if (!match) {
-        return
-      }
-      const year = parseInt(match[1])
-      const month = parseInt(match[2])
-      if (new Date(year, month).getTime() > Date.now()) {
-        return
-      }
+      if (!match) return
+
+      const [ , year, month] = match.map(Number)
+      const currentDate = new Date()
+      const selectedDate = new Date(year, month)
+
+      if(selectedDate.getTime() > currentDate.getTime()) return
+
       store.commit('updateCalendarYear', { year })
       store.commit('updateCalendarMonth', { month })
     }
