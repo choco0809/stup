@@ -6,7 +6,7 @@ class StudyTimeRecord < ApplicationRecord
 
   scope :monthly_study_records, lambda { |year, month|
     where("to_char(started_at,'yyyy') = ?", year)
-    where("to_char(started_at,'mm') = ?", month)
+      .where("to_char(started_at,'mm') = ?", month)
   }
 
   def self.check_ready_started?
