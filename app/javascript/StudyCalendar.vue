@@ -144,11 +144,11 @@ export default {
       const match = /(\d{4})-(\d{2})/.exec(yearMonth)
       if (!match) return
 
-      const [ , year, month] = match.map(Number)
+      const [, year, month] = match.map(Number)
       const currentDate = new Date()
       const selectedDate = new Date(year, month)
 
-      if(selectedDate.getTime() > currentDate.getTime()) return
+      if (selectedDate.getTime() > currentDate.getTime()) return
 
       store.commit('updateCalendarYear', { year })
       store.commit('updateCalendarMonth', { month })
