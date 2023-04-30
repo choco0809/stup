@@ -155,9 +155,7 @@ export default {
         },
         credentials: 'same-origin'
       })
-        .then((response) => {
-          return response.json()
-        })
+        .then((response) => response.json())
         .then((json) => {
           store.commit('deleteStudyTimeRecord', { record: json })
           store.commit('closeShowModal')
