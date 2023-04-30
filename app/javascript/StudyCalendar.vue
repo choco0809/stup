@@ -184,31 +184,29 @@ export default {
     }
 
     const previousMonth = () => {
-      if (store.getters.calendarMonth === 1) {
-        store.commit('updateCalendarMonth', { month: 12 })
-        store.commit('updateCalendarYear', {
-          year: store.getters.calendarYear - 1
-        })
-      } else {
-        store.commit('updateCalendarMonth', {
-          month: store.getters.calendarMonth - 1
-        })
-      }
+      const currentMonth = store.getters.calendarMonth
+      const currentYear = store.getters.calendarYear
+
+      const newMonth = currentMonth === 1 ? 12 : currentMonth - 1
+      const newYear = currentMonth === 1 ? currentYear - 1 : currentYear
+
+      store.commit('updateCalendarMonth', { month: newMonth })
+      store.commit('updateCalendarYear', { year: newYear })
+
       saveState()
       fetchMonthlyStudyTimeRecords()
     }
 
     const nextMonth = () => {
-      if (store.getters.calendarMonth === 12) {
-        store.commit('updateCalendarMonth', { month: 1 })
-        store.commit('updateCalendarYear', {
-          year: store.getters.calendarYear + 1
-        })
-      } else {
-        store.commit('updateCalendarMonth', {
-          month: store.getters.calendarMonth + 1
-        })
-      }
+      const currentMonth = store.getters.calendarMonth
+      const currentYear = store.getters.calendarYear
+
+      const newMonth = currentMonth === 12 ? 1 : currentMonth + 1
+      const newYear = currentMonth === 12 ? currentYear + 1 : currentYear
+
+      store.commit('updateCalendarMonth', { month: newMonth })
+      store.commit('updateCalendarYear', { year: newYear })
+
       saveState()
       fetchMonthlyStudyTimeRecords()
     }
