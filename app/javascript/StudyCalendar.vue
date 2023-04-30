@@ -38,7 +38,7 @@
               {{ date.date }}
             </div>
             <div class="study-time">
-              <div v-if="isFutureDate(date.date)">　</div>
+              <div v-if="isFutureDate(date.date)">&nbsp;</div>
               <div v-else-if="studyTimesLength(date.dailyStudyTime)">
                 <button @click="openModal(date)">ー</button>
               </div>
