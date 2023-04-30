@@ -6,7 +6,7 @@
     <div class="text-center mb-3 w-48">
       {{ calendarYear }} 年 {{ calendarMonth }} 月
     </div>
-    <div v-if="!newsMonth()" class="w-4" @click="nextMonth">
+    <div v-if="!isNewsMonth()" class="w-4" @click="nextMonth">
       <button class="hover:border-b-2 border-black">＞</button>
     </div>
     <div v-else class="w-4"></div>
@@ -28,13 +28,17 @@
         <td
           v-for="date in week.value"
           :key="date.weekDay"
-          class="border border-black h-16">
+          :class="
+            date.highlight
+              ? 'border border-black h-16 shadow-highlight'
+              : 'border border-black h-16'
+          ">
           <div v-if="date.date" class="study-ask">
             <div>
               {{ date.date }}
             </div>
             <div class="study-time">
-              <div v-if="futureDate(date.date)">▲</div>
+              <div v-if="isFutureDate(date.date)"></div>
               <div v-else-if="studyTimesLength(date.dailyStudyTime)">
                 <button @click="openModal(date)">ー</button>
               </div>
@@ -72,22 +76,21 @@ export default {
     const modalDate = ref(0)
 
     const firstWday = computed(() => {
-      const firstDay = new Date(
-        store.getters.calendarYear,
-        store.getters.calendarMonth - 1,
-        1
-      )
+      const { calendarYear, calendarMonth } = store.getters
+      const firstDay = new Date(calendarYear, calendarMonth - 1, 1)
       return firstDay.getDay()
     })
 
     const lastDate = computed(() => {
-      const lastDay = new Date(
-        store.getters.calendarYear,
-        store.getters.calendarMonth,
-        0
-      )
+      const { calendarYear, calendarMonth } = store.getters
+      const lastDay = new Date(calendarYear, calendarMonth, 0)
       return lastDay.getDate()
     })
+
+    const isEndedAtSet = (array) => {
+      if (array.length === 0) return false
+      return array.some((item) => item.ended_at === null)
+    }
 
     const calendarDates = computed(() => {
       const calendar = []
@@ -106,7 +109,11 @@ export default {
             )
           }
         )
-        calendar.push({ date, dailyStudyTime })
+        calendar.push({
+          date,
+          dailyStudyTime,
+          highlight: isEndedAtSet(dailyStudyTime)
+        })
       }
       return calendar
     })
@@ -135,14 +142,14 @@ export default {
       const params = new URLSearchParams(location.search)
       const yearMonth = params.get('calendar') || ''
       const match = /(\d{4})-(\d{2})/.exec(yearMonth)
-      if (!match) {
-        return
-      }
-      const year = parseInt(match[1])
-      const month = parseInt(match[2])
-      if (new Date(year, month).getTime() > Date.now()) {
-        return
-      }
+      if (!match) return
+
+      const [, year, month] = match.map(Number)
+      const currentDate = new Date()
+      const selectedDate = new Date(year, month)
+
+      if (selectedDate.getTime() > currentDate.getTime()) return
+
       store.commit('updateCalendarYear', { year })
       store.commit('updateCalendarMonth', { month })
     }
@@ -159,9 +166,7 @@ export default {
           credentials: 'same-origin'
         }
       )
-        .then((response) => {
-          return response.json()
-        })
+        .then((response) => response.json())
         .then((json) => {
           store.commit('updateMonthlyStudyTime', { monthlyStudyTime: json })
         })
@@ -171,47 +176,45 @@ export default {
     }
 
     const saveState = () => {
-      const year = String(store.getters.calendarYear)
-      const month = String(store.getters.calendarMonth).padStart(2, '0')
+      const year = store.getters.calendarYear.toString()
+      const month = formatMonth(store.getters.calendarMonth)
       const params = new URLSearchParams(location.search)
       params.set('calendar', `${year}-${month}`)
       history.replaceState(history.state, '', `?${params}${location.hash}`)
     }
 
     const previousMonth = () => {
-      if (store.getters.calendarMonth === 1) {
-        store.commit('updateCalendarMonth', { month: 12 })
-        store.commit('updateCalendarYear', {
-          year: store.getters.calendarYear - 1
-        })
-      } else {
-        store.commit('updateCalendarMonth', {
-          month: store.getters.calendarMonth - 1
-        })
-      }
+      const currentMonth = store.getters.calendarMonth
+      const currentYear = store.getters.calendarYear
+
+      const newMonth = currentMonth === 1 ? 12 : currentMonth - 1
+      const newYear = currentMonth === 1 ? currentYear - 1 : currentYear
+
+      store.commit('updateCalendarMonth', { month: newMonth })
+      store.commit('updateCalendarYear', { year: newYear })
+
       saveState()
       fetchMonthlyStudyTimeRecords()
     }
 
     const nextMonth = () => {
-      if (store.getters.calendarMonth === 12) {
-        store.commit('updateCalendarMonth', { month: 1 })
-        store.commit('updateCalendarYear', {
-          year: store.getters.calendarYear + 1
-        })
-      } else {
-        store.commit('updateCalendarMonth', {
-          month: store.getters.calendarMonth + 1
-        })
-      }
+      const currentMonth = store.getters.calendarMonth
+      const currentYear = store.getters.calendarYear
+
+      const newMonth = currentMonth === 12 ? 1 : currentMonth + 1
+      const newYear = currentMonth === 12 ? currentYear + 1 : currentYear
+
+      store.commit('updateCalendarMonth', { month: newMonth })
+      store.commit('updateCalendarYear', { year: newYear })
+
       saveState()
       fetchMonthlyStudyTimeRecords()
     }
 
-    const newsMonth = () => {
+    const isNewsMonth = () => {
       return (
-        (store.getters.calendarYear === store.getters.currentYear) &
-        (store.getters.calendarMonth === store.getters.currentMonth)
+        store.getters.calendarYear === store.getters.currentYear &&
+        store.getters.calendarMonth === store.getters.currentMonth
       )
     }
 
@@ -223,13 +226,13 @@ export default {
       return year + month + day
     }
 
-    const futureDate = (date) => {
+    const isFutureDate = (date) => {
       const nowDate = getFormattedNowDate()
       const targetDate =
         store.getters.calendarYear +
         formatMonth(store.getters.calendarMonth) +
         formatDay(date)
-      return targetDate > nowDate
+      return parseInt(targetDate) > parseInt(nowDate)
     }
 
     const studyTimesLength = (studyTimes) => {
@@ -239,7 +242,7 @@ export default {
     const totalStudyTimes = (studyTimes) => {
       return studyTimes.reduce(function (sum, records) {
         if (records.ended_at == null) {
-          return sum + 0
+          return sum
         } else {
           const startedAt = new Date(records.started_at)
           const endedAt = new Date(records.ended_at)
@@ -278,8 +281,8 @@ export default {
       calendarWeeks,
       previousMonth,
       nextMonth,
-      newsMonth,
-      futureDate,
+      isNewsMonth,
+      isFutureDate,
       studyTimesLength,
       totalStudyTimes,
       openModal,
