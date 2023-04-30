@@ -28,7 +28,11 @@
         <td
           v-for="date in week.value"
           :key="date.weekDay"
-          :class="date.highlight ? 'border border-black h-16 shadow-highlight' : 'border border-black h-16'">
+          :class="
+            date.highlight
+              ? 'border border-black h-16 shadow-highlight'
+              : 'border border-black h-16'
+          ">
           <div v-if="date.date" class="study-ask">
             <div>
               {{ date.date }}
@@ -90,8 +94,8 @@ export default {
     })
 
     const isEndedAtSet = (array) => {
-      if(array.length === 0) return false
-      return array.some(item => item.ended_at === null)
+      if (array.length === 0) return false
+      return array.some((item) => item.ended_at === null)
     }
 
     const calendarDates = computed(() => {
@@ -111,7 +115,11 @@ export default {
             )
           }
         )
-        calendar.push({ date, dailyStudyTime, highlight: isEndedAtSet(dailyStudyTime) })
+        calendar.push({
+          date,
+          dailyStudyTime,
+          highlight: isEndedAtSet(dailyStudyTime)
+        })
       }
       return calendar
     })
