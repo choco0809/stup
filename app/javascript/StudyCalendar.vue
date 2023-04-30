@@ -177,7 +177,7 @@ export default {
 
     const saveState = () => {
       const year = store.getters.calendarYear.toString()
-      const month = store.getters.calendarMonth.toString().padStart(2, '0')
+      const month = formatMonth(store.getters.calendarMonth)
       const params = new URLSearchParams(location.search)
       params.set('calendar', `${year}-${month}`)
       history.replaceState(history.state, '', `?${params}${location.hash}`)
