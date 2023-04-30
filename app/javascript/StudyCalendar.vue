@@ -38,7 +38,7 @@
               {{ date.date }}
             </div>
             <div class="study-time">
-              <div v-if="futureDate(date.date)">▲</div>
+              <div v-if="isFutureDate(date.date)"></div>
               <div v-else-if="studyTimesLength(date.dailyStudyTime)">
                 <button @click="openModal(date)">ー</button>
               </div>
@@ -226,13 +226,13 @@ export default {
       return year + month + day
     }
 
-    const futureDate = (date) => {
+    const isFutureDate = (date) => {
       const nowDate = getFormattedNowDate()
       const targetDate =
         store.getters.calendarYear +
         formatMonth(store.getters.calendarMonth) +
         formatDay(date)
-      return targetDate > nowDate
+      return parseInt(targetDate) > parseInt(nowDate)
     }
 
     const studyTimesLength = (studyTimes) => {
@@ -281,8 +281,8 @@ export default {
       calendarWeeks,
       previousMonth,
       nextMonth,
-      newsMonth,
-      futureDate,
+      isNewsMonth,
+      isFutureDate,
       studyTimesLength,
       totalStudyTimes,
       openModal,
