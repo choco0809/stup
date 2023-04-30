@@ -6,7 +6,7 @@
     <div class="text-center mb-3 w-48">
       {{ calendarYear }} 年 {{ calendarMonth }} 月
     </div>
-    <div v-if="!newsMonth()" class="w-4" @click="nextMonth">
+    <div v-if="!isNewsMonth()" class="w-4" @click="nextMonth">
       <button class="hover:border-b-2 border-black">＞</button>
     </div>
     <div v-else class="w-4"></div>
@@ -211,10 +211,10 @@ export default {
       fetchMonthlyStudyTimeRecords()
     }
 
-    const newsMonth = () => {
+    const isNewsMonth = () => {
       return (
-        (store.getters.calendarYear === store.getters.currentYear) &
-        (store.getters.calendarMonth === store.getters.currentMonth)
+        store.getters.calendarYear === store.getters.currentYear &&
+        store.getters.calendarMonth === store.getters.currentMonth
       )
     }
 
