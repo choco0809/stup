@@ -242,7 +242,7 @@ export default {
     const totalStudyTimes = (studyTimes) => {
       return studyTimes.reduce(function (sum, records) {
         if (records.ended_at == null) {
-          return sum + 0
+          return sum
         } else {
           const startedAt = new Date(records.started_at)
           const endedAt = new Date(records.ended_at)
